@@ -91,11 +91,13 @@ class TileEndWellRenderer : TileEntitySpecialRenderer<TileEndWell>() {
         GlStateManager.translate(x, y, z)
         GlStateManager.scale(radius, radius, radius)
 
-        GlStateManager.color(1f, 1f, 1f, 0.5f)
+        GlStateManager.color(1f, 1f, 1f, 0.75f)
         GL11.glCallList(GLCallList.sphereOutID)
-        GlStateManager.color(1f, 1f, 1f, 0.25f)
+        GlStateManager.color(1f, 1f, 1f, 0.4f)
         GL11.glCallList(GLCallList.sphereInID)
 
+        GlStateManager.color(1f, 1f, 1f, 1f)
+        GlStateManager.disableBlend()
         GlStateManager.popMatrix()
     }
 }
