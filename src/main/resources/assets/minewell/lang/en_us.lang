@@ -1,0 +1,21 @@
+tile.minewell.end_well.name=End Well Core
+
+# Minewell
+event.minewell.peaceful=The End Well can NOT be started in Peaceful mode.
+event.minewell.tier.one=End Well Tier I
+event.minewell.tier.two=End Well Tier II
+event.minewell.tier.three=End Well Tier III
+
+event.minewell.stage.one.charging=The Well hums to life...
+event.minewell.stage.one.objective=Defeat enemies to charge the Well.
+
+event.minewell.stage.two.charging=The hums are slowly becoming louder...
+event.minewell.stage.two.objective=Defeat enemies to charge the Well.
+
+event.minewell.stage.three.charging=The Well is nearly overflowing with energy.
+event.minewell.stage.three.objective=Defeat enemies to charge the Well.
+
+event.minewell.stage.boss.charging=The Well's energy is leaking out and takeing a form!
+event.minewell.stage.boss.objective=Defeat the Ender Champion
+
+event.minewell.timer=Time Left: %s

@@ -1,0 +1,16 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "custom": {
+      "flip-v": true
+    }
+  },
+  "variants": {
+    "normal": {
+      "model": "minewell:end_well.obj"
+    },
+    "inventory": {
+      "model": "minewell:end_well"
+    }
+  }
+}

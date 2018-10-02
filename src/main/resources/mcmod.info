@@ -1,0 +1,15 @@
+[
+{
+  "modid": "minewell",
+  "name": "Minewell",
+  "description": "Adds the Blind Well to MC.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Lomeli12"],
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
