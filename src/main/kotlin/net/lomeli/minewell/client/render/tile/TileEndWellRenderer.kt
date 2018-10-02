@@ -48,7 +48,6 @@ class TileEndWellRenderer : TileEntitySpecialRenderer<TileEndWell>() {
             GlStateManager.shadeModel(GL11.GL_FLAT)
 
         GlStateManager.translate(-tile.pos.x.toFloat(), -tile.pos.y.toFloat(), -tile.pos.z.toFloat())
-        GlStateManager.translate(0f, 0f, 0f)
 
         val tess = Tessellator.getInstance()
         val buffer = tess.buffer
