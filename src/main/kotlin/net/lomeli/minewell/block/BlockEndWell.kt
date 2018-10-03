@@ -21,17 +21,17 @@ import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 
-class BlockEndWell : BlockContainer(Material.GLASS) {
+class BlockEndWell : BlockBase("end_well", Material.GLASS) {
     init {
         this.setRegistryName(Minewell.MOD_ID, "end_well")
-        this.unlocalizedName = "${Minewell.MOD_ID}.end_well"
         this.blockHardness = 35f
         this.blockResistance = 2000f
         this.blockSoundType = SoundType.STONE
         this.setCreativeTab(CreativeTabs.DECORATIONS)
     }
 
-    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, hand: EnumHand, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean {
+    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
+                                  hand: EnumHand, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         val itemUsed = playerIn.getHeldItem(hand)
         if (itemUsed.item == Items.NETHER_STAR) {
             val tile = worldIn.getTileEntity(pos)
@@ -43,8 +43,6 @@ class BlockEndWell : BlockContainer(Material.GLASS) {
                 }
                 tile.setTier(TierOne())
 
-                //tile.setTimer(120)
-                //tile.activated = true
                 if (!playerIn.isCreative)
                     itemUsed.shrink(1)
             }
@@ -57,15 +55,9 @@ class BlockEndWell : BlockContainer(Material.GLASS) {
 
     override fun isBlockNormalCube(state: IBlockState): Boolean = false
 
-    //@SideOnly(Side.CLIENT)
-    //override fun getBlockLayer(): BlockRenderLayer = BlockRenderLayer.CUTOUT
-
-    //override fun getRenderType(state: IBlockState): EnumBlockRenderType = EnumBlockRenderType.ENTITYBLOCK_ANIMATED
-
-    //override fun isFullCube(state: IBlockState): Boolean = false
-
     override fun isOpaqueCube(state: IBlockState): Boolean = false
 
-    override fun createNewTileEntity(worldIn: World, meta: Int): TileEntity? = TileEndWell()
+    override fun hasTileEntity(state: IBlockState): Boolean = true
 
+    override fun createTileEntity(world: World, state: IBlockState): TileEntity? = TileEndWell()
 }
