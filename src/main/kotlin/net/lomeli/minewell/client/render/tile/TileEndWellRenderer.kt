@@ -18,8 +18,6 @@ import org.lwjgl.opengl.GL11
 class TileEndWellRenderer : TileEntitySpecialRenderer<TileEndWell>() {
     override fun render(tile: TileEndWell, x: Double, y: Double, z: Double, partialTicks: Float,
                         destroyStage: Int, alpha: Float) {
-
-        GlStateManager.pushAttrib()
         GlStateManager.pushMatrix()
 
         GlStateManager.translate(x + 0.5f, y, z + 0.5f)
@@ -27,14 +25,13 @@ class TileEndWellRenderer : TileEntitySpecialRenderer<TileEndWell>() {
         GlStateManager.rotate(angle, 0f, 1f, 0f)
         GlStateManager.disableRescaleNormal()
 
+        GlStateManager.color(1f, 1f, 1f, 0.7f)
         renderCrystal(tile)
 
+        GlStateManager.enableRescaleNormal()
         GlStateManager.popMatrix()
-        GlStateManager.popAttrib()
 
-        if (tile.isWellActivated()) {
-            renderWellEffects(tile, x, y, z, partialTicks, destroyStage, alpha)
-        }
+        renderWellEffects(tile, x, y, z, partialTicks, destroyStage, alpha)
     }
 
     private fun renderCrystal(tile: TileEndWell) {
@@ -53,7 +50,7 @@ class TileEndWellRenderer : TileEntitySpecialRenderer<TileEndWell>() {
         val buffer = tess.buffer
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK)
 
-        val state = ModBlocks.END_WELL.defaultState;
+        val state = ModBlocks.END_WELL.defaultState
         val dispatcher = FMLClientHandler.instance().client.blockRendererDispatcher
         val model = dispatcher.getModelForState(state)
         dispatcher.blockModelRenderer.renderModel(world, model, state, tile.pos, buffer, true)
@@ -65,10 +62,11 @@ class TileEndWellRenderer : TileEntitySpecialRenderer<TileEndWell>() {
 
     private fun renderWellEffects(tile: TileEndWell, x: Double, y: Double, z: Double, partialTicks: Float,
                                   destroyStage: Int, alpha: Float) {
-        if (ClientTickHandler.ticksInGame % 10 == 0) {
+        if (ClientTickHandler.ticksInGame % 10 == 0 && tile.isWellActivated()) {
             renderActivatedParticles(tile.pos)
         }
-        drawSphere(x + 0.5f, y - 1.5f, z + 0.5f, tile.radius)
+        if (tile.radius > 0f)
+            drawSphere(x + 0.5f, y - 1.5f, z + 0.5f, tile.radius)
     }
 
     private fun renderWitherParticles(pos: BlockPos) {

@@ -38,5 +38,7 @@ class TierOne: WellTier() {
     }
 
 
-    override fun getTierName(): String = "event.minewell.tier.one"
+    override fun getUnlocalizedName(): String = "event.minewell.tier.one"
+
+    override fun getRegistryName(): String = "tier.minewell.tier_one"
 }

@@ -1,6 +1,7 @@
 package net.lomeli.minewell.well
 
 import net.lomeli.minewell.block.tile.TileEndWell
+import net.minecraft.nbt.NBTTagCompound
 
 abstract class WellTier {
     private var stage = Stage.STAGE_ONE_CHARGING
@@ -42,6 +43,7 @@ abstract class WellTier {
     }
 
     fun changeTier(tile: TileEndWell, stage: Stage) {
+        this.currentKills = 0
         this.stage = stage
         tile.setTimer(this.stage.getMaxTime())
     }
@@ -62,7 +64,32 @@ abstract class WellTier {
 
     fun getCurrentKills() = currentKills
 
-    abstract fun getTierName(): String
+    fun addKills(value: Int) {
+        currentKills += value
+    }
+
+    abstract fun getUnlocalizedName(): String
 
     fun getCurrentStage(): Stage = stage
+
+    fun setStage(stage: Stage) {
+        this.stage = stage
+    }
+
+    abstract fun getRegistryName(): String
+
+    fun writeToNBT(nbt: NBTTagCompound) {
+        nbt.setString("end_well_tier", getRegistryName())
+        val wellData = NBTTagCompound()
+        wellData.setInteger("kills", getCurrentKills())
+        wellData.setInteger("stage", stage.ordinal)
+        nbt.setTag("end_well_data", wellData)
+    }
+
+    fun readFromNBT(nbt: NBTTagCompound) {
+        if (!nbt.hasKey("end_well_data", 10)) return
+        val wellData = nbt.getTag("end_well_data") as NBTTagCompound
+        currentKills = wellData.getInteger("kills")
+        stage = STAGE_VALUES[wellData.getInteger("stage")]
+    }
 }
