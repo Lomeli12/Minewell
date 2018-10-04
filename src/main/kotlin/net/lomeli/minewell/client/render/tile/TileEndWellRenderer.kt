@@ -4,6 +4,8 @@ import net.lomeli.minewell.block.ModBlocks
 import net.lomeli.minewell.block.tile.TileEndWell
 import net.lomeli.minewell.client.effects.GLCallList
 import net.lomeli.minewell.client.handler.ClientTickHandler
+import net.lomeli.minewell.client.helpers.ShaderHelper
+import net.lomeli.minewell.client.render.shader.ShaderEndPortal
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.Tessellator
@@ -19,16 +21,17 @@ class TileEndWellRenderer : TileEntitySpecialRenderer<TileEndWell>() {
     override fun render(tile: TileEndWell, x: Double, y: Double, z: Double, partialTicks: Float,
                         destroyStage: Int, alpha: Float) {
         GlStateManager.pushMatrix()
-
         GlStateManager.translate(x + 0.5f, y, z + 0.5f)
         val angle = (ClientTickHandler.ticksInGame % 360f)
         GlStateManager.rotate(angle, 0f, 1f, 0f)
-        GlStateManager.disableRescaleNormal()
 
-        GlStateManager.color(1f, 1f, 1f, 0.7f)
+        if (useShaders(tile))
+            ShaderHelper.useShader(ShaderEndPortal.endPortalShader, ShaderEndPortal.enderCallback)
+
         renderCrystal(tile)
 
-        GlStateManager.enableRescaleNormal()
+        if (useShaders(tile))
+            ShaderHelper.releaseShader()
         GlStateManager.popMatrix()
 
         renderWellEffects(tile, x, y, z, partialTicks, destroyStage, alpha)
@@ -38,7 +41,11 @@ class TileEndWellRenderer : TileEntitySpecialRenderer<TileEndWell>() {
         GlStateManager.pushMatrix()
         GlStateManager.translate(-0.5f, 0f, -0.5f)
         RenderHelper.disableStandardItemLighting()
-        bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
+        var texture = TextureMap.LOCATION_BLOCKS_TEXTURE
+        if (useShaders(tile))
+            texture = ShaderEndPortal.END_PORTAL_TEXTURE
+        bindTexture(texture)
+
         if (FMLClientHandler.instance().client.gameSettings.ambientOcclusion != 0)
             GlStateManager.shadeModel(GL11.GL_SMOOTH)
         else
@@ -69,10 +76,6 @@ class TileEndWellRenderer : TileEntitySpecialRenderer<TileEndWell>() {
             drawSphere(x + 0.5f, y - 1.5f, z + 0.5f, tile.radius)
     }
 
-    private fun renderWitherParticles(pos: BlockPos) {
-
-    }
-
     private fun renderActivatedParticles(pos: BlockPos) {
         for (i in 0..4) {
             val d0 = pos.x + world.rand.nextDouble()
@@ -97,4 +100,7 @@ class TileEndWellRenderer : TileEntitySpecialRenderer<TileEndWell>() {
         GlStateManager.disableBlend()
         GlStateManager.popMatrix()
     }
+
+    private fun useShaders(tile: TileEndWell): Boolean = ShaderHelper.useShaders() &&
+            ShaderEndPortal.endPortalShader != 0 && tile.isWellActivated()
 }
