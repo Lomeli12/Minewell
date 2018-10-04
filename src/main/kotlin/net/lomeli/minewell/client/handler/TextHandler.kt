@@ -1,11 +1,9 @@
 package net.lomeli.minewell.client.handler
 
 import net.lomeli.minewell.Minewell
-import net.lomeli.minewell.block.tile.MAX_DISTANCE
 import net.lomeli.minewell.block.tile.TileEndWell
 import net.lomeli.minewell.core.util.RangeUtil
 import net.minecraft.client.resources.I18n
-import net.minecraft.util.math.BlockPos
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.fml.client.FMLClientHandler
 import net.minecraftforge.fml.common.Mod
@@ -18,7 +16,7 @@ object TextHandler {
 
     @JvmStatic @SubscribeEvent fun renderOverlay(event: RenderGameOverlayEvent.Text) {
         val player = mc.player ?: return
-        val pos = RangeUtil.isPlayerNearWell(player, true)
+        val pos = RangeUtil.isEntityNearWell(player, true)
         if (pos != null) {
             val tile = player.world.getTileEntity(pos) as TileEndWell
             if (tile.getTier() != null) {

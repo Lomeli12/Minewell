@@ -16,7 +16,7 @@ object PlayerEvents {
         if (player.world.isRemote) return
         val stack = event.itemStack
         if (stack.item == Items.STICK) {
-            val pos = RangeUtil.isPlayerNearWell(player, false)
+            val pos = RangeUtil.isEntityNearWell(player, false)
             if (pos != null) {
                 val playerDistance = player.getDistance(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble())
                 player.sendMessage(TextComponentString("Distance: $playerDistance"))

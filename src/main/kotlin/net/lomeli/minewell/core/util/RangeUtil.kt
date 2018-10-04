@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
 
 object RangeUtil {
-    fun isPlayerNearWell(entity: Entity, activeWell: Boolean): BlockPos? {
+    fun isEntityNearWell(entity: Entity, activeWell: Boolean): BlockPos? {
         val distance = MAX_DISTANCE.toInt()
         for (x in -distance..distance)
             for (y in -distance..distance)
