@@ -5,6 +5,8 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ITickable
 import net.minecraft.world.EnumDifficulty
 
+const val MAX_DISTANCE = 20f
+
 class TileEndWell : TileEntity(), ITickable {
     private val MAX_RADIUS = 5.5f
     private val RADIUS_RATE = 0.05f
