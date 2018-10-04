@@ -1,7 +1,7 @@
 package net.lomeli.minewell.entity
 
 import net.lomeli.minewell.block.tile.TileEndWell
-import net.lomeli.minewell.core.util.SimpleMoveHelper
+import net.lomeli.minewell.core.helpers.SimpleMoveHelper
 import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.BlockPos

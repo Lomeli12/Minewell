@@ -1,4 +1,4 @@
-package net.lomeli.minewell.core.util
+package net.lomeli.minewell.core.helpers
 
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.BlockPos
