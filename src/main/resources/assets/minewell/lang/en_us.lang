@@ -1,10 +1,18 @@
 tile.minewell.end_well.name=End Well Core
 
+# Potions
+potion.minewell.sky_touch=Touch of Sky
+potion.minewell.void_touch=Touch of the Void
+potion.minewell.harmony=Harmony
+potion.minewell.light=Light
+
+death.attack.minewell.void_touch=%1$s vanished into the Void.
+
 # Minewell
-event.minewell.peaceful=The End Well can NOT be started in Peaceful mode.
-event.minewell.tier.one=End Well Tier I
-event.minewell.tier.two=End Well Tier II
-event.minewell.tier.three=End Well Tier III
+event.minewell.peaceful=§4The End Well can NOT be started in Peaceful mode.§r
+event.minewell.tier.one=§5End Well Tier I§r
+event.minewell.tier.two=§5End Well Tier II§r
+event.minewell.tier.three=§5End Well Tier III§r
 
 event.minewell.stage.one.charging=The Well hums to life...
 event.minewell.stage.one.objective=Defeat enemies to charge the Well.
@@ -19,3 +27,5 @@ event.minewell.stage.boss.charging=The Well's energy is leaking out and takeing 
 event.minewell.stage.boss.objective=Defeat the Ender Champion
 
 event.minewell.timer=Time Left: %s
+
+entity.minewell.light_orb.name=Orb of Light
