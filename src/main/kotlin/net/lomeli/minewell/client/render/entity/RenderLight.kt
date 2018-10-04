@@ -1,7 +1,6 @@
 package net.lomeli.minewell.client.render.entity
 
 import net.lomeli.minewell.entity.EntityLight
-import net.minecraft.client.renderer.GLAllocation
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
 import net.minecraft.client.renderer.entity.Render
@@ -14,18 +13,10 @@ import net.minecraftforge.fml.client.FMLClientHandler
 import net.minecraftforge.fml.client.registry.IRenderFactory
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
-import java.util.*
 
 
 @SideOnly(Side.CLIENT)
 class RenderLight(renderManager: RenderManager) : Render<EntityLight>(renderManager) {
-    private val END_SKY_TEXTURE = ResourceLocation("textures/environment/end_sky.png")
-    private val END_PORTAL_TEXTURE = ResourceLocation("textures/entity/end_portal.png")
-    private val RANDOM = Random(31100L)
-    private val MODELVIEW = GLAllocation.createDirectFloatBuffer(16)
-    private val PROJECTION = GLAllocation.createDirectFloatBuffer(16)
-    private val buffer = GLAllocation.createDirectFloatBuffer(16)
-
     val itemRenderer = FMLClientHandler.instance().client.renderItem
 
     init {
