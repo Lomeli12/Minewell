@@ -12,6 +12,8 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.world.EnumDifficulty
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 
 const val MAX_DISTANCE = 20f
 
@@ -106,9 +108,7 @@ class TileEndWell : TileEntity(), ITickable {
         return super.writeToNBT(nbt)
     }
 
-    override fun getUpdateTag(): NBTTagCompound {
-        return writeToNBT(NBTTagCompound())
-    }
+    override fun getUpdateTag(): NBTTagCompound =writeToNBT(NBTTagCompound())
 
     override fun getUpdatePacket(): SPacketUpdateTileEntity? {
         val nbt = NBTTagCompound()
@@ -118,5 +118,10 @@ class TileEndWell : TileEntity(), ITickable {
 
     override fun onDataPacket(net: NetworkManager, pkt: SPacketUpdateTileEntity) {
         readFromNBT(pkt.nbtCompound)
+    }
+
+    @SideOnly(Side.CLIENT) override fun getRenderBoundingBox(): AxisAlignedBB {
+        if (isWellActivated()) return super.getRenderBoundingBox().grow(6.0)
+        return super.getRenderBoundingBox()
     }
 }
