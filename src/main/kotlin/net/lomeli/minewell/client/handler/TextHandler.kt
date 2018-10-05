@@ -4,6 +4,7 @@ import net.lomeli.minewell.Minewell
 import net.lomeli.minewell.block.tile.TileEndWell
 import net.lomeli.minewell.core.util.RangeUtil
 import net.minecraft.client.resources.I18n
+import net.minecraft.util.math.MathHelper
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.fml.client.FMLClientHandler
 import net.minecraftforge.fml.common.Mod
@@ -33,9 +34,9 @@ object TextHandler {
     }
 
     private fun createTimer(time: Int): String {
-        val timeInSec = Math.floor(time / 20.0)
-        var min = Math.floor(timeInSec / 60.0).toInt()
-        var secs = Math.floor(timeInSec % 60.0).toInt()
+        val timeInSec = MathHelper.floor(time / 20.0)
+        var min = MathHelper.floor(timeInSec / 60.0)
+        var secs = MathHelper.floor(timeInSec % 60.0)
         if (min < 0) min = 0
         if (secs < 0) secs = 0
         val minSt = if (min > 9) min.toString() else "0$min"
