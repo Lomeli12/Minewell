@@ -96,6 +96,7 @@ class TileEndWell : TileEntity(), ITickable {
         if (nbt.hasKey("end_well_tier", 8)) {
             val tierName = nbt.getString("end_well_tier")
             eventTier = TierRegistry.getTierFromName(tierName, nbt)
+            eventTier!!.readFromNBT(nbt)
         }
         super.readFromNBT(nbt)
     }
