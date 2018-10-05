@@ -81,5 +81,5 @@ void main() {
         col = col*(1-a) + vec4(r,g,b,1)*a;
     }
 
-	gl_FragColor = col;
+    gl_FragColor = col;
 }
