@@ -1,12 +1,14 @@
 package net.lomeli.minewell.client.helpers
 
-import net.lomeli.minewell.client.handler.BarOverlay.mc
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
+import net.minecraftforge.fml.client.FMLClientHandler
 import org.lwjgl.opengl.GL11
 
 object RenderHelper {
+    private val mc = FMLClientHandler.instance().client
+
     fun drawTexturedModalRect(x: Int, y: Int, zLevel: Float, textureX: Int, textureY: Int, width: Int, height: Int) {
         drawTexturedModalRect(x, y, zLevel, textureX, textureY, width, height, 0.00390625f, 0.00390625f)
     }

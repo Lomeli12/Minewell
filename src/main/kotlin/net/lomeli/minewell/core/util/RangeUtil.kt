@@ -18,12 +18,13 @@ object RangeUtil {
                     val pos = BlockPos(newX, newY, newZ)
                     val tile = entity.world.getTileEntity(pos)
                     if (tile is TileEndWell) {
-                        val playerDistance = if (activeWell && tile.isWellActivated())
-                            entity.getDistance(newX, newY - 2, newZ)
-                        else
+                        var playerDistance = -1f
+                        if (activeWell) {
+                            if (tile.isWellActivated())
+                                entity.getDistance(newX, newY - 2, newZ)
+                        } else
                             entity.getDistance(newX, newY, newZ)
-
-                        if (playerDistance <= MAX_DISTANCE)
+                        if (playerDistance != -1f && playerDistance <= MAX_DISTANCE)
                             return pos
                     }
                 }

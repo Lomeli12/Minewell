@@ -20,8 +20,8 @@ import net.minecraftforge.fml.relauncher.Side
 
 @Mod.EventBusSubscriber(modid = Minewell.MOD_ID, value = Side.CLIENT)
 object BarOverlay {
-    val mc = FMLClientHandler.instance().client
-    val GUI_BARS_TEXTURES = ResourceLocation("textures/gui/bars.png")
+    private val mc = FMLClientHandler.instance().client
+    private val BAR_TEXTURES = ResourceLocation(Minewell.MOD_ID, "textures/gui/bars.png")
 
     @JvmStatic
     @SubscribeEvent
@@ -33,9 +33,9 @@ object BarOverlay {
             val pos = RangeUtil.isEntityNearWell(player, true)
             if (pos != null) {
                 GlStateManager.pushMatrix()
-                //GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-                //        GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-                //        GlStateManager.DestFactor.ZERO)
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+                        GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+                        GlStateManager.DestFactor.ZERO)
                 GlStateManager.enableBlend()
 
                 renderStageInfo(player, pos)
@@ -70,7 +70,7 @@ object BarOverlay {
     }
 
     private fun renderBar(xPos: Int, yPos: Int, tier: WellTier) {
-        mc.textureManager.bindTexture(ResourceLocation(Minewell.MOD_ID, "textures/gui/bars.png"))
+        mc.textureManager.bindTexture(BAR_TEXTURES)
         RenderHelper.drawTexturedModalRect(xPos, yPos, 0f, 0, 0, 182, 7)
         //TODO: Make config to display 1/4 markers
         RenderHelper.drawTexturedModalRect(xPos, yPos, 0f, 0, 14, 182, 7)
