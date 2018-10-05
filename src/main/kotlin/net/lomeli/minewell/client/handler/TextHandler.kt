@@ -33,8 +33,9 @@ object TextHandler {
     }
 
     private fun createTimer(time: Int): String {
-        var min = Math.floor(time / 60.0).toInt()
-        var secs = Math.floor(time % 60.0).toInt()
+        val timeInSec = Math.floor(time / 20.0)
+        var min = Math.floor(timeInSec / 60.0).toInt()
+        var secs = Math.floor(timeInSec % 60.0).toInt()
         if (min < 0) min = 0
         if (secs < 0) secs = 0
         val minSt = if (min > 9) min.toString() else "0$min"

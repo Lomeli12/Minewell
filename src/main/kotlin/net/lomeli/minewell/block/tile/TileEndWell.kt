@@ -32,8 +32,8 @@ class TileEndWell : TileEntity(), ITickable {
             timer = 0
         }
         if (isWellActivated() && timer > 0) {
+            timer--
             if (world.worldTime % 20L == 0L) {
-                timer--
                 if (!world.isRemote) {
                     if (eventTier!!.getCurrentStage().hasMiasma())
                         giveTouchEffects()
@@ -83,7 +83,7 @@ class TileEndWell : TileEntity(), ITickable {
     fun isWellActivated(): Boolean = eventTier != null
 
     fun setTimer(timeInSec: Int) {
-        timer = timeInSec
+        timer = timeInSec * 20
     }
 
     fun getTimer(): Int = timer
