@@ -64,6 +64,15 @@ abstract class WellTier {
 
     fun getCurrentKills() = currentKills
 
+    fun getKillsNeeded(): Int {
+        when (stage) {
+            Stage.STAGE_ONE -> return getStageOneKills()
+            Stage.STAGE_TWO -> return getStageTwoKills()
+            Stage.STAGE_THREE -> return getStageThreeKills()
+        }
+        return 0
+    }
+
     fun addKills(value: Int) {
         currentKills += value
     }
