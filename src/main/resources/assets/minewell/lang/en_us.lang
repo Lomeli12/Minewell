@@ -26,6 +26,7 @@ event.minewell.stage.three.objective=Defeat enemies to charge the Well.
 event.minewell.stage.boss.charging=The Well's energy is leaking out and takeing a form!
 event.minewell.stage.boss.objective=Defeat the Ender Champion
 
+event.minewell.charge=Charge Progress
 event.minewell.timer=Time Left: %s
 
 entity.minewell.light_orb.name=Orb of Light
