@@ -79,7 +79,7 @@ void main() {
 
         // mix the colours
         col = col*(1-a) + vec4(r,g,b,1)*a;
-	}
+    }
 
 	gl_FragColor = col;
 }
