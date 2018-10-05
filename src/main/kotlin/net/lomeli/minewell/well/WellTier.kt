@@ -1,91 +1,77 @@
 package net.lomeli.minewell.well
 
 import net.lomeli.minewell.block.tile.TileEndWell
+import net.lomeli.minewell.core.helpers.MobSpawnerHelper
+import net.minecraft.entity.EntityLiving
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.potion.PotionEffect
 
 abstract class WellTier {
     private var stage = Stage.STAGE_ONE_CHARGING
     private var currentKills = 0
+    private var mobSpawnerHelper: MobSpawnerHelper? = null
 
     open fun updateTick(tile: TileEndWell) {
+        if (mobSpawnerHelper == null)
+            mobSpawnerHelper = MobSpawnerHelper(tile, getTierMobs(), getTierPotionEffects(), 30, 5)
         when (stage) {
             Stage.STAGE_ONE_CHARGING -> {
-                if (tile.getTimer() <= 0) changeTier(tile, Stage.STAGE_ONE)
+                if (tile.getTimer() <= 0)
+                    changeTier(tile, Stage.STAGE_ONE)
             }
             Stage.STAGE_ONE -> {
-                stageOne(tile)
-                if (getCurrentKills() >= getStageOneKills())
+                mobSpawnerHelper!!.spawnMonsters()
+                if (getCurrentKills() >= getKillsNeeded())
                     changeTier(tile, Stage.STAGE_TWO_CHARGING)
             }
             Stage.STAGE_TWO_CHARGING -> {
                 if (tile.getTimer() <= 0) changeTier(tile, Stage.STAGE_TWO)
             }
             Stage.STAGE_TWO -> {
-                stageTwo(tile)
-                if (getCurrentKills() >= getStageTwoKills())
+                mobSpawnerHelper!!.spawnMonsters()
+                if (getCurrentKills() >= getKillsNeeded())
                     changeTier(tile, Stage.STAGE_THREE_CHARGING)
             }
             Stage.STAGE_THREE_CHARGING -> {
                 if (tile.getTimer() <= 0) changeTier(tile, Stage.STAGE_THREE)
             }
             Stage.STAGE_THREE -> {
-                stageThree(tile)
-                if (getCurrentKills() >= getStageThreeKills())
+                mobSpawnerHelper!!.spawnMonsters()
+                if (getCurrentKills() >= getKillsNeeded())
                     changeTier(tile, Stage.BOSS_CHARGING)
             }
             Stage.BOSS_CHARGING -> {
-                if (tile.getTimer() <= 0) changeTier(tile, Stage.BOSS)
+                if (tile.getTimer() <= 0) {
+
+                    changeTier(tile, Stage.BOSS)
+                }
             }
             Stage.BOSS -> {
-                bossStage(tile)
+
             }
         }
     }
 
-    fun changeTier(tile: TileEndWell, stage: Stage) {
+    private fun changeTier(tile: TileEndWell, stage: Stage) {
         this.currentKills = 0
         this.stage = stage
         tile.setTimer(this.stage.getMaxTime())
     }
 
-    abstract fun stageOne(tile: TileEndWell)
-
-    abstract fun getStageOneKills(): Int
-
-    abstract fun stageTwo(tile: TileEndWell)
-
-    abstract fun getStageTwoKills(): Int
-
-    abstract fun stageThree(tile: TileEndWell)
-
-    abstract fun getStageThreeKills(): Int
-
-    abstract fun bossStage(tile: TileEndWell)
-
     fun getCurrentKills() = currentKills
-
-    fun getKillsNeeded(): Int {
-        when (stage) {
-            Stage.STAGE_ONE -> return getStageOneKills()
-            Stage.STAGE_TWO -> return getStageTwoKills()
-            Stage.STAGE_THREE -> return getStageThreeKills()
-        }
-        return 0
-    }
 
     fun addKills(value: Int) {
         currentKills += value
     }
 
+    abstract fun getTierMobs(): Array<Class<out EntityLiving>>
+    abstract fun getTierPotionEffects(): Array<PotionEffect>
+    abstract fun getKillsNeeded(): Int
     abstract fun getUnlocalizedName(): String
+    abstract fun getRegistryName(): String
+    abstract fun getTierBoss(): Array<EntityLiving>
 
     fun getCurrentStage(): Stage = stage
-
-    fun setStage(stage: Stage) {
-        this.stage = stage
-    }
-
-    abstract fun getRegistryName(): String
 
     fun writeToNBT(nbt: NBTTagCompound) {
         nbt.setString("end_well_tier", getRegistryName())

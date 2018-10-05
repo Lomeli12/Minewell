@@ -2,7 +2,7 @@ package net.lomeli.minewell.block
 
 import net.lomeli.minewell.Minewell
 import net.lomeli.minewell.block.tile.TileEndWell
-import net.lomeli.minewell.well.TierOne
+import net.lomeli.minewell.well.tiers.TierOne
 import net.minecraft.block.SoundType
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState

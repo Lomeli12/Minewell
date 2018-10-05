@@ -1,5 +1,6 @@
 package net.lomeli.minewell.well
 
+import net.lomeli.minewell.well.tiers.TierOne
 import net.minecraft.nbt.NBTTagCompound
 
 object TierRegistry {
