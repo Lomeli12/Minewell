@@ -7,22 +7,34 @@ import gnu.trove.map.hash.TIntFloatHashMap
 import net.lomeli.minewell.Minewell
 import net.lomeli.minewell.client.handler.ClientTickHandler
 import net.lomeli.minewell.client.render.shader.ShaderCallback
+import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.OpenGlHelper
+import net.minecraftforge.fml.common.Loader
 import org.lwjgl.opengl.ARBFragmentShader
 import org.lwjgl.opengl.ARBShaderObjects
 import org.lwjgl.opengl.ARBVertexShader
 import org.lwjgl.opengl.GL11
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.util.stream.Collectors
+
+
 
 
 object ShaderHelper {
     private val VERT = ARBVertexShader.GL_VERTEX_SHADER_ARB
     private val FRAG = ARBFragmentShader.GL_FRAGMENT_SHADER_ARB
     private val prevTime = TIntFloatHashMap()
+    private var hasIncompatibleMods = false
+    private var checkedIncompatibility = false
+    private var lighting = false
 
     fun useShader(shader: Int, callback: ShaderCallback?) {
         if (!useShaders()) return
+
+        lighting = GL11.glGetBoolean(GL11.GL_LIGHTING)
+        GlStateManager.disableLighting()
+
         ARBShaderObjects.glUseProgramObjectARB(shader)
 
         if (shader != 0) {
@@ -43,11 +55,21 @@ object ShaderHelper {
     }
 
     fun releaseShader() {
+        if (lighting)
+            GlStateManager.enableLighting()
         useShader(0)
     }
 
     //TODO: Add config to disable shaders
-    fun useShaders(): Boolean = OpenGlHelper.shadersSupported
+    fun useShaders(): Boolean = OpenGlHelper.shadersSupported && checkIncompatibleMods()
+
+    private fun checkIncompatibleMods(): Boolean {
+        if(!checkedIncompatibility) {
+            hasIncompatibleMods = Loader.isModLoaded("optifine")
+            checkedIncompatibility = true
+        }
+        return !hasIncompatibleMods
+    }
 
     // Most of the code taken from the LWJGL wiki
     // http://lwjgl.org/wiki/index.php?title=GLSL_Shaders_with_LWJGL
@@ -59,6 +81,7 @@ object ShaderHelper {
             vertId = createShader(vert, VERT)
         if (frag != null)
             fragId = createShader(frag, FRAG)
+
         program = ARBShaderObjects.glCreateProgramObjectARB()
         if (program == 0)
             return 0
@@ -66,6 +89,7 @@ object ShaderHelper {
             ARBShaderObjects.glAttachObjectARB(program, vertId)
         if (frag != null)
             ARBShaderObjects.glAttachObjectARB(program, fragId)
+
         ARBShaderObjects.glLinkProgramARB(program)
         if (ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_LINK_STATUS_ARB) == GL11.GL_FALSE) {
             Minewell.log.logError(getLogInfo(program))
@@ -113,56 +137,9 @@ object ShaderHelper {
 
     @Throws(Exception::class)
     private fun readFileAsString(filename: String): String {
-        val source = StringBuilder()
-        val input = ShaderHelper::class.java.getResourceAsStream(filename)
-        var exception: Exception? = null
-        val reader: BufferedReader
-
-        if (input == null)
-            return ""
-
-        try {
-            reader = BufferedReader(InputStreamReader(input, "UTF-8"))
-
-            var innerExc: Exception? = null
-            try {
-                var line = reader.readLine()
-                while (line != null) {
-                    source.append(line).append('\n')
-                    line = reader.readLine()
-                }
-            } catch (exc: Exception) {
-                exception = exc
-            } finally {
-                try {
-                    reader.close()
-                } catch (exc: Exception) {
-                    if (innerExc == null)
-                        innerExc = exc
-                    else
-                        exc.printStackTrace()
-                }
-
-            }
-
-            if (innerExc != null)
-                throw innerExc
-        } catch (exc: Exception) {
-            exception = exc
-        } finally {
-            try {
-                input.close()
-            } catch (exc: Exception) {
-                if (exception == null)
-                    exception = exc
-                else
-                    exc.printStackTrace()
-            }
-
-            if (exception != null)
-                throw exception
+        val stream = ShaderHelper.javaClass.getResourceAsStream(filename) ?: return ""
+        BufferedReader(InputStreamReader(stream, "UTF-8")).use { reader ->
+            return reader.lines().collect(Collectors.joining("\n"))
         }
-
-        return source.toString()
     }
 }
