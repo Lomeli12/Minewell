@@ -15,6 +15,7 @@ class BossTracker(boss: Array<out EntityLiving>) {
     private val mobList = ArrayList<EntityLiving>()
     private val maxNumberOfMobs: Int
     private var hasSpawned = false
+    private var updateIDs = ArrayList<UUID>()
 
     init {
         mobList.addAll(boss)
