@@ -32,8 +32,9 @@ class EntityLight(world: World) : Entity(world) {
     }
 
     override fun onUpdate() {
+        if (world == null) return
         moveHelper.onEntityUpdate()
-        if (targetPos == null || world.getTileEntity(targetPos!!) !is TileEndWell) setDead()
+        if (!world.isRemote && (targetPos == null || world.getTileEntity(targetPos!!) !is TileEndWell)) setDead()
 
         if (!world.isRemote && targetPos != null) {
             val vec3d = Vec3d(posX, posY, posZ)
