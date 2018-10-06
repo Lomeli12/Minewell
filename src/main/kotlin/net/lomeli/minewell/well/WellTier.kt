@@ -11,8 +11,8 @@ import net.minecraft.world.World
 abstract class WellTier {
     private var stage = Stage.STAGE_ONE_CHARGING
     private var currentKills = 0
-    private var mobSpawnerHelper: MobSpawnerHelper? = null
-    private var bossTracker: BossTracker? = null
+    protected var bossTracker: BossTracker? = null
+    protected var mobSpawnerHelper: MobSpawnerHelper? = null
 
     open fun updateTick(tile: TileEndWell) {
         if (mobSpawnerHelper == null)
@@ -23,7 +23,7 @@ abstract class WellTier {
                     changeTier(tile, Stage.STAGE_ONE)
             }
             Stage.STAGE_ONE -> {
-                mobSpawnerHelper!!.spawnMonsters()
+                mobSpawnerHelper!!.spawnMonsters(tile)
                 if (getCurrentKills() >= getKillsNeeded())
                     changeTier(tile, Stage.STAGE_TWO_CHARGING)
             }
@@ -31,7 +31,7 @@ abstract class WellTier {
                 if (tile.getTimer() <= 0) changeTier(tile, Stage.STAGE_TWO)
             }
             Stage.STAGE_TWO -> {
-                mobSpawnerHelper!!.spawnMonsters()
+                mobSpawnerHelper!!.spawnMonsters(tile)
                 if (getCurrentKills() >= getKillsNeeded())
                     changeTier(tile, Stage.STAGE_THREE_CHARGING)
             }
@@ -39,7 +39,7 @@ abstract class WellTier {
                 if (tile.getTimer() <= 0) changeTier(tile, Stage.STAGE_THREE)
             }
             Stage.STAGE_THREE -> {
-                mobSpawnerHelper!!.spawnMonsters()
+                mobSpawnerHelper!!.spawnMonsters(tile)
                 if (getCurrentKills() >= getKillsNeeded())
                     changeTier(tile, Stage.BOSS_CHARGING)
             }
