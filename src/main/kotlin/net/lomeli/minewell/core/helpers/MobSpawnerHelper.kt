@@ -31,7 +31,7 @@ class MobSpawnerHelper(private val entityList: Array<out EntityLiving>,
                 it.remove()
             }
         }
-        if (tile.getTimer() % 30 == 0) {
+        if (tile.getTimer() % 20 == 0) {
             // Clear dead mobs
             if (mobList.isNotEmpty()) {
                 val it = mobList.iterator()
