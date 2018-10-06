@@ -66,6 +66,7 @@ abstract class WellTier {
             Stage.BOSS -> {
                 bossTracker?.updateTracker(this, tile)
                 if (getCurrentKills() >= getKillsNeeded()) {
+                    tile.world.playBroadcastSound(1028, tile.pos, 0)
                     failure = false
                     giverPlayersRewards(tile)
                     tile.setTimer(0)
