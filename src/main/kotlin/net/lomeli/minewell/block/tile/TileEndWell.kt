@@ -54,15 +54,10 @@ class TileEndWell : TileEntity(), ITickable {
 
             eventTier!!.updateTick(this)
 
-            if (eventTier!!.getCurrentStage().hasSafeSphere()) {
-                if (radius < MAX_RADIUS) {
-                    radius += RADIUS_RATE
-                    if (radius > MAX_RADIUS)
-                        radius = MAX_RADIUS
-                }
-            } else {
-                if (radius > 0f)
-                    radius -= RADIUS_RATE
+            if (radius < MAX_RADIUS) {
+                radius += RADIUS_RATE
+                if (radius > MAX_RADIUS)
+                    radius = MAX_RADIUS
             }
 
             if (timer <= 0) {
