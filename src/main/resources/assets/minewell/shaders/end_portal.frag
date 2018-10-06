@@ -4,7 +4,7 @@
 #define M_PI 3.1415926535897932384626433832795
 
 uniform sampler2D texture;
-uniform int time;
+uniform float time;
 
 uniform float yaw;
 uniform float pitch;
