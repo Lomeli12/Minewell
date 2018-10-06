@@ -1,5 +1,6 @@
 package net.lomeli.minewell.block.tile
 
+import com.google.common.base.Strings
 import net.lomeli.minewell.potion.ModPotions
 import net.lomeli.minewell.well.TierRegistry
 import net.lomeli.minewell.well.WellTier
@@ -21,11 +22,20 @@ class TileEndWell : TileEntity(), ITickable {
     private val MAX_RADIUS = 5.5f
     private val RADIUS_RATE = 0.05f
     private var eventTier: WellTier? = null
+    private var tierName: String? = null
+    private var tierData: NBTTagCompound? = null
     var radius = 0f
     private var timer = 0
 
     override fun update() {
         if (world == null) return
+
+        if (!Strings.isNullOrEmpty(tierName) && tierData != null) {
+            eventTier = TierRegistry.getTierFromName(tierName!!, tierData, this)
+            eventTier!!.readFromNBT(tierData!!)
+            tierData = null
+            tierName = null
+        }
 
         if (world.difficulty == EnumDifficulty.PEACEFUL) {
             eventTier = null
@@ -94,9 +104,8 @@ class TileEndWell : TileEntity(), ITickable {
         if (nbt.hasKey("radius", 5))
             radius = nbt.getFloat("radius")
         if (nbt.hasKey("end_well_tier", 8)) {
-            val tierName = nbt.getString("end_well_tier")
-            eventTier = TierRegistry.getTierFromName(tierName, nbt)
-            eventTier!!.readFromNBT(nbt)
+            tierName = nbt.getString("end_well_tier")
+            tierData = nbt
         }
         super.readFromNBT(nbt)
     }

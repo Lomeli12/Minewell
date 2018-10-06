@@ -1,5 +1,6 @@
 package net.lomeli.minewell.core.helpers
 
+import com.google.common.base.Strings
 import net.lomeli.minewell.block.tile.MAX_DISTANCE
 import net.lomeli.minewell.block.tile.TileEndWell
 import net.lomeli.minewell.potion.ModPotions
@@ -8,6 +9,7 @@ import net.minecraft.entity.EntityLiving
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.nbt.NBTTagList
 import net.minecraft.potion.PotionEffect
+import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import java.util.*
@@ -57,24 +59,31 @@ class MobSpawnerHelper(private val entityList: Array<out EntityLiving>,
         for (attempt in 0..4) {
             val position = getSpawnPoint(tile)
             val mobBase = entityList[rand.nextInt(entityList.size)]
-            val nbt = NBTTagCompound()
-            mobBase.writeEntityToNBT(nbt)
-            val entityAttempt = EntityList.createEntityFromNBT(nbt, tile.world) as EntityLiving
-            if (entityAttempt != null) {
-                val entitySpawned = spawnMonsterAtLocation(tile, entityAttempt, position.x, position.y, position.z)
-                if (entitySpawned != null) {
-                    entitySpawned.forceSpawn = true
-                    entitySpawned.enablePersistence()
+            mobBase.setUniqueId(MathHelper.getRandomUUID(rand))
+            val id = getEntityName(mobBase)
+            if (!Strings.isNullOrEmpty(id)) {
+                val nbt = NBTTagCompound()
+                mobBase.writeToNBT(nbt)
+                nbt.setString("id", id!!)
+                val entityAttempt = EntityList.createEntityFromNBT(nbt, tile.world)
+                if (entityAttempt is EntityLiving) {
+                    val entitySpawned = spawnMonsterAtLocation(tile, entityAttempt, position.x, position.y, position.z)
+                    if (entitySpawned != null) {
+                        entitySpawned.forceSpawn = true
+                        entitySpawned.enablePersistence()
 
-                    // Apply light and other potion effects
-                    entitySpawned.addPotionEffect(PotionEffect(ModPotions.LIGHT, Int.MAX_VALUE))
+                        // Apply light and other potion effects
+                        entitySpawned.addPotionEffect(PotionEffect(ModPotions.LIGHT, Int.MAX_VALUE))
 
-                    mobList.add(entitySpawned)
-                    break
+                        mobList.add(entitySpawned)
+                        break
+                    }
                 }
             }
         }
     }
+
+    private fun getEntityName(entity: EntityLiving): String? = EntityList.getKey(entity)?.toString()
 
     private fun getSpawnPoint(tile: TileEndWell): Vec3d {
         val d0 = tile.pos.x.toDouble() + (tile.world.rand.nextDouble() - tile.world.rand.nextDouble()) * MAX_DISTANCE

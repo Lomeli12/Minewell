@@ -1,8 +1,6 @@
 package net.lomeli.minewell.well.tiers
 
 import net.lomeli.minewell.block.tile.TileEndWell
-import net.lomeli.minewell.core.helpers.MobSpawnerHelper
-import net.lomeli.minewell.core.util.BossTracker
 import net.lomeli.minewell.well.Stage
 import net.lomeli.minewell.well.WellTier
 import net.minecraft.entity.EntityLiving
@@ -15,12 +13,7 @@ import net.minecraft.inventory.EntityEquipmentSlot
 import net.minecraft.item.ItemStack
 import net.minecraft.potion.PotionEffect
 
-class TierOne(tile: TileEndWell) : WellTier() {
-
-    init {
-        mobSpawnerHelper = MobSpawnerHelper(getTierMobs(tile), 30, 5)
-        bossTracker = BossTracker(getTierBosses(tile))
-    }
+class TierOne : WellTier() {
 
     override fun getTierMobs(tile: TileEndWell): Array<out EntityLiving> {
         val zombie = EntityZombie(tile.world)

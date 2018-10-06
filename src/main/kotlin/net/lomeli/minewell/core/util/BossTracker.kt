@@ -1,5 +1,6 @@
 package net.lomeli.minewell.core.util
 
+import com.google.common.base.Strings
 import net.lomeli.minewell.block.tile.MAX_DISTANCE
 import net.lomeli.minewell.block.tile.TileEndWell
 import net.lomeli.minewell.well.WellTier
@@ -7,6 +8,7 @@ import net.minecraft.entity.EntityList
 import net.minecraft.entity.EntityLiving
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.nbt.NBTTagList
+import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import java.util.*
@@ -45,14 +47,20 @@ class BossTracker(private val bossBaes: Array<out EntityLiving>) {
     private fun spawnBosses(tile: TileEndWell) {
         if (hasSpawned) return
         for (entityBase in bossBaes) {
-            val nbt = NBTTagCompound()
-            entityBase.writeEntityToNBT(nbt)
-            val entity = EntityList.createEntityFromNBT(nbt, tile.world) as EntityLiving
-            if (entity != null)
-                spawnBoss(entity, tile)
+            entityBase.setUniqueId(MathHelper.getRandomUUID(tile.world.rand))
+            val id = getEntityName(entityBase)
+            if (!Strings.isNullOrEmpty(id)) {
+                val nbt = NBTTagCompound()
+                entityBase.writeToNBT(nbt)
+                val entity = EntityList.createEntityFromNBT(nbt, tile.world)
+                if (entity is EntityLiving)
+                    spawnBoss(entity, tile)
+            }
         }
         hasSpawned = true
     }
+
+    private fun getEntityName(entity: EntityLiving): String? = EntityList.getKey(entity)?.toString()
 
     private fun spawnBoss(boss: EntityLiving, tile: TileEndWell) {
         while (true) {

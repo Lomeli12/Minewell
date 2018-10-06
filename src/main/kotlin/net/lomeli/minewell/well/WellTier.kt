@@ -9,8 +9,13 @@ import net.minecraft.nbt.NBTTagCompound
 abstract class WellTier {
     private var stage = Stage.STAGE_ONE_CHARGING
     private var currentKills = 0
-    protected var bossTracker: BossTracker? = null
-    protected var mobSpawnerHelper: MobSpawnerHelper? = null
+    private var bossTracker: BossTracker? = null
+    private var mobSpawnerHelper: MobSpawnerHelper? = null
+
+    open fun initTier(tile: TileEndWell) {
+        mobSpawnerHelper = MobSpawnerHelper(getTierMobs(tile), 30, 5)
+        bossTracker = BossTracker(getTierBosses(tile))
+    }
 
     open fun updateTick(tile: TileEndWell) {
         when (stage) {

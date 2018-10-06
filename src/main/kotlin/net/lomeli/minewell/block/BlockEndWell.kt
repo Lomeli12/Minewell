@@ -42,7 +42,9 @@ class BlockEndWell : BlockBase("end_well", Material.GLASS) {
                         playerIn.sendMessage(TextComponentTranslation("event.minewell.peaceful"))
                     return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ)
                 }
-                tile.setTier(TierOne())
+                val tier = TierOne()
+                tier.initTier(tile)
+                tile.setTier(tier)
 
                 if (!playerIn.isCreative)
                     itemUsed.shrink(1)
