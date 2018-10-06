@@ -94,7 +94,7 @@ class TileEndWell : TileEntity(), ITickable {
         if (playerList.isNotEmpty()) {
             for (player in playerList) {
                 val distance = player.getDistance(pos.x.toDouble(), pos.y - 2.0, pos.z.toDouble())
-                if (distance <= MAX_RADIUS) list.add(player)
+                if (distance <= MAX_DISTANCE) list.add(player)
             }
         }
         return list
