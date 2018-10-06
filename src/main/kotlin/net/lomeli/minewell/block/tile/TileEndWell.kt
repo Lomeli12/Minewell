@@ -117,7 +117,7 @@ class TileEndWell : TileEntity(), ITickable {
 
     fun getTier(): WellTier? = eventTier
 
-    fun isWellActivated(): Boolean = eventTier != null
+    fun isWellActivated(): Boolean = eventTier != null && timer > 0
 
     fun setTimer(timeInSec: Int) {
         timer = timeInSec * 20
