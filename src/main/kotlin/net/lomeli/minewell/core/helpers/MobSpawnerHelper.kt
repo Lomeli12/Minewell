@@ -13,8 +13,8 @@ import net.minecraft.world.World
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MobSpawnerHelper(private val mobClassList: Array<Class<out EntityLiving>>,
-                       private val potionEffects: Array<PotionEffect>, private val maxNumberOfMobs: Int,
+class MobSpawnerHelper(private val entityList: Array<out EntityLiving>,
+                       private val maxNumberOfMobs: Int,
                        private val spawnSise: Int) {
     private val rand = Random()
     private val mobList = ArrayList<EntityLiving>()
@@ -56,19 +56,18 @@ class MobSpawnerHelper(private val mobClassList: Array<Class<out EntityLiving>>,
     private fun spawnNewMob(tile: TileEndWell) {
         for (attempt in 0..4) {
             val position = getSpawnPoint(tile)
-            val mobClass = mobClassList[rand.nextInt(mobClassList.size)]
-            val entityAttempt = EntityList.newEntity(mobClass, tile.world) as EntityLiving
+            val mobBase = entityList[rand.nextInt(entityList.size)]
+            val nbt = NBTTagCompound()
+            mobBase.writeEntityToNBT(nbt)
+            val entityAttempt = EntityList.createEntityFromNBT(nbt, tile.world) as EntityLiving
             if (entityAttempt != null) {
                 val entitySpawned = spawnMonsterAtLocation(tile, entityAttempt, position.x, position.y, position.z)
                 if (entitySpawned != null) {
-                    entitySpawned.onInitialSpawn(tile.world.getDifficultyForLocation(entitySpawned.position), null)
                     entitySpawned.forceSpawn = true
                     entitySpawned.enablePersistence()
 
                     // Apply light and other potion effects
                     entitySpawned.addPotionEffect(PotionEffect(ModPotions.LIGHT, Int.MAX_VALUE))
-                    for (effect in potionEffects)
-                        entitySpawned.addPotionEffect(effect)
 
                     mobList.add(entitySpawned)
                     break

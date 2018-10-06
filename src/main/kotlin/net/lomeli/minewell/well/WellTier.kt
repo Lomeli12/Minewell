@@ -5,8 +5,6 @@ import net.lomeli.minewell.core.helpers.MobSpawnerHelper
 import net.lomeli.minewell.core.util.BossTracker
 import net.minecraft.entity.EntityLiving
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.potion.PotionEffect
-import net.minecraft.world.World
 
 abstract class WellTier {
     private var stage = Stage.STAGE_ONE_CHARGING
@@ -64,12 +62,11 @@ abstract class WellTier {
         currentKills += value
     }
 
-    abstract fun getTierMobs(): Array<Class<out EntityLiving>>
-    abstract fun getTierPotionEffects(): Array<PotionEffect>
+    abstract fun getTierMobs(tile: TileEndWell): Array<out EntityLiving>
     abstract fun getKillsNeeded(): Int
     abstract fun getUnlocalizedName(): String
     abstract fun getRegistryName(): String
-    abstract fun getTierBosses(world: World): Array<out EntityLiving>
+    abstract fun getTierBosses(tile: TileEndWell): Array<out EntityLiving>
 
     fun getCurrentStage(): Stage = stage
 

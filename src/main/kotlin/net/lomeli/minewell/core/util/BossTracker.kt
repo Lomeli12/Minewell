@@ -3,6 +3,7 @@ package net.lomeli.minewell.core.util
 import net.lomeli.minewell.block.tile.MAX_DISTANCE
 import net.lomeli.minewell.block.tile.TileEndWell
 import net.lomeli.minewell.well.WellTier
+import net.minecraft.entity.EntityList
 import net.minecraft.entity.EntityLiving
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.nbt.NBTTagList
@@ -10,17 +11,12 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import java.util.*
 
-class BossTracker(boss: Array<out EntityLiving>) {
-
+class BossTracker(private val bossBaes: Array<out EntityLiving>) {
     private val mobList = ArrayList<EntityLiving>()
-    private val maxNumberOfMobs: Int
+    private val maxNumberOfMobs = bossBaes.size
     private var hasSpawned = false
     private var updateIDs = ArrayList<UUID>()
 
-    init {
-        mobList.addAll(boss)
-        maxNumberOfMobs = boss.size
-    }
 
     fun updateTracker(tier: WellTier, tile: TileEndWell) {
         if (tile.world != null && updateIDs.isNotEmpty()) {
@@ -46,10 +42,16 @@ class BossTracker(boss: Array<out EntityLiving>) {
         }
     }
 
-    private fun spawnBosses(tier: WellTier, tile: TileEndWell) {
+    private fun spawnBosses(tile: TileEndWell) {
         if (hasSpawned) return
-        for (boss in mobList)
-            spawnBoss(boss, tile)
+        for (entityBase in bossBaes) {
+            val nbt = NBTTagCompound()
+            entityBase.writeEntityToNBT(nbt)
+            val entity = EntityList.createEntityFromNBT(nbt, tile.world) as EntityLiving
+            if (entity != null)
+                spawnBoss(entity, tile)
+        }
+        hasSpawned = true
     }
 
     private fun spawnBoss(boss: EntityLiving, tile: TileEndWell) {
@@ -59,6 +61,7 @@ class BossTracker(boss: Array<out EntityLiving>) {
             if (entitySpawned != null) {
                 entitySpawned.forceSpawn = true
                 entitySpawned.enablePersistence()
+                mobList.add(entitySpawned)
                 break
             }
         }
