@@ -2,7 +2,6 @@ package net.lomeli.minewell.block.tile
 
 import com.google.common.base.Strings
 import net.lomeli.minewell.core.helpers.NetworkHelper
-import net.lomeli.minewell.core.util.RangeUtil
 import net.lomeli.minewell.potion.ModPotions
 import net.lomeli.minewell.well.TierRegistry
 import net.lomeli.minewell.well.WellTier
@@ -14,6 +13,7 @@ import net.minecraft.potion.PotionEffect
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ITickable
 import net.minecraft.util.math.AxisAlignedBB
+import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.world.EnumDifficulty
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
@@ -52,18 +52,32 @@ class TileEndWell : TileEntity(), ITickable {
                 }
             }
 
-            eventTier?.updateTick(this)
+            eventTier!!.updateTick(this)
 
-            if (radius < MAX_RADIUS) {
-                radius += RADIUS_RATE
-                if (radius > MAX_RADIUS)
-                    radius = MAX_RADIUS
+            if (eventTier!!.getCurrentStage().hasSafeSphere()) {
+                if (radius < MAX_RADIUS) {
+                    radius += RADIUS_RATE
+                    if (radius > MAX_RADIUS)
+                        radius = MAX_RADIUS
+                }
+            } else {
+                if (radius > 0f)
+                    radius -= RADIUS_RATE
             }
+
             if (timer <= 0) {
                 eventTier?.clearMobs()
-                eventTier = null
-                if (!world.isRemote)
+                if (!world.isRemote) {
                     NetworkHelper.updateClientsWithinRange(0, 0, this)
+                    if (eventTier!!.isFailure()) {
+                        val players = getPlayersInRange()
+                        if (players.isNotEmpty()) {
+                            for (player in players)
+                                player.sendMessage(TextComponentTranslation("event.minewell.failure"))
+                        }
+                    }
+                }
+                eventTier = null
             }
             this.markDirty()
         } else {
@@ -72,10 +86,22 @@ class TileEndWell : TileEntity(), ITickable {
         }
     }
 
-    fun giveTouchEffects() {
+    fun getPlayersInRange(): ArrayList<EntityPlayer> {
+        val list = ArrayList<EntityPlayer>()
         val range = AxisAlignedBB(pos.x.toDouble(), pos.y - 2.0, pos.z.toDouble(), pos.x + 1.0, pos.y - 1.0, pos.z + 1.0)
                 .grow(MAX_DISTANCE.toDouble())
         val playerList = world.getEntitiesWithinAABB(EntityPlayer::class.java, range)
+        if (playerList.isNotEmpty()) {
+            for (player in playerList) {
+                val distance = player.getDistance(pos.x.toDouble(), pos.y - 2.0, pos.z.toDouble())
+                if (distance <= MAX_RADIUS) list.add(player)
+            }
+        }
+        return list
+    }
+
+    fun giveTouchEffects() {
+        val playerList = getPlayersInRange()
         if (playerList.isEmpty()) return
         for (player in playerList) {
             val distance = player.getDistance(pos.x.toDouble(), pos.y - 2.0, pos.z.toDouble())
@@ -123,7 +149,7 @@ class TileEndWell : TileEntity(), ITickable {
         return super.writeToNBT(nbt)
     }
 
-    override fun getUpdateTag(): NBTTagCompound =writeToNBT(NBTTagCompound())
+    override fun getUpdateTag(): NBTTagCompound = writeToNBT(NBTTagCompound())
 
     override fun getUpdatePacket(): SPacketUpdateTileEntity? {
         val nbt = NBTTagCompound()
@@ -135,7 +161,8 @@ class TileEndWell : TileEntity(), ITickable {
         readFromNBT(pkt.nbtCompound)
     }
 
-    @SideOnly(Side.CLIENT) override fun getRenderBoundingBox(): AxisAlignedBB {
+    @SideOnly(Side.CLIENT)
+    override fun getRenderBoundingBox(): AxisAlignedBB {
         if (isWellActivated()) return super.getRenderBoundingBox().grow(6.0)
         return super.getRenderBoundingBox()
     }

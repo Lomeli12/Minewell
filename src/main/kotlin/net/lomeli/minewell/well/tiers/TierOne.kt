@@ -2,6 +2,7 @@ package net.lomeli.minewell.well.tiers
 
 import net.lomeli.minewell.block.tile.TileEndWell
 import net.lomeli.minewell.well.Stage
+import net.lomeli.minewell.well.WellReward
 import net.lomeli.minewell.well.WellTier
 import net.minecraft.entity.EntityLiving
 import net.minecraft.entity.monster.EntitySkeleton
@@ -54,6 +55,16 @@ class TierOne : WellTier() {
         boss.addPotionEffect(PotionEffect(MobEffects.STRENGTH, Int.MAX_VALUE))
         boss.addPotionEffect(PotionEffect(MobEffects.RESISTANCE, Int.MAX_VALUE))
         return arrayOf(boss)
+    }
+
+    override fun possibleRewards(): Array<WellReward> {
+        val rewards = ArrayList<WellReward>()
+        rewards.add(WellReward(ItemStack(Items.GOLDEN_APPLE, 1, 0), 1f))
+        rewards.add(WellReward(ItemStack(Items.DIAMOND), 0.5f))
+        rewards.add(WellReward(ItemStack(Items.DIAMOND), 0.5f))
+        rewards.add(WellReward(ItemStack(Items.DIAMOND), 0.5f))
+        rewards.add(WellReward(ItemStack(Items.NETHER_STAR), 0.25f))
+        return rewards.toTypedArray()
     }
 
     override fun getKillsNeeded(): Int {
