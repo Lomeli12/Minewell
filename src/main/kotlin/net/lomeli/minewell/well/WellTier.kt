@@ -2,6 +2,7 @@ package net.lomeli.minewell.well
 
 import net.lomeli.minewell.block.tile.TileEndWell
 import net.lomeli.minewell.core.helpers.MobSpawnerHelper
+import net.lomeli.minewell.core.helpers.NetworkHelper
 import net.lomeli.minewell.core.util.BossTracker
 import net.minecraft.entity.EntityLiving
 import net.minecraft.nbt.NBTTagCompound
@@ -24,47 +25,67 @@ abstract class WellTier {
                     changeTier(tile, Stage.STAGE_ONE)
             }
             Stage.STAGE_ONE -> {
-                mobSpawnerHelper!!.spawnMonsters(tile)
+                mobSpawnerHelper?.spawnMonsters(tile)
                 if (getCurrentKills() >= getKillsNeeded())
                     changeTier(tile, Stage.STAGE_TWO_CHARGING)
             }
             Stage.STAGE_TWO_CHARGING -> {
+                mobSpawnerHelper?.destroyTrackedMobs()
                 if (tile.getTimer() <= 0) changeTier(tile, Stage.STAGE_TWO)
             }
             Stage.STAGE_TWO -> {
-                mobSpawnerHelper!!.spawnMonsters(tile)
+                mobSpawnerHelper?.spawnMonsters(tile)
                 if (getCurrentKills() >= getKillsNeeded())
                     changeTier(tile, Stage.STAGE_THREE_CHARGING)
             }
             Stage.STAGE_THREE_CHARGING -> {
+                mobSpawnerHelper?.destroyTrackedMobs()
                 if (tile.getTimer() <= 0) changeTier(tile, Stage.STAGE_THREE)
             }
             Stage.STAGE_THREE -> {
-                mobSpawnerHelper!!.spawnMonsters(tile)
+                mobSpawnerHelper?.spawnMonsters(tile)
                 if (getCurrentKills() >= getKillsNeeded())
                     changeTier(tile, Stage.BOSS_CHARGING)
             }
             Stage.BOSS_CHARGING -> {
+                mobSpawnerHelper?.destroyTrackedMobs()
                 if (tile.getTimer() <= 0) {
                     changeTier(tile, Stage.BOSS)
                 }
             }
             Stage.BOSS -> {
-                bossTracker!!.updateTracker(this, tile)
+                bossTracker?.updateTracker(this, tile)
             }
         }
     }
 
+    fun clearMobs() {
+        mobSpawnerHelper?.destroyTrackedMobs()
+        bossTracker?.destroyTrackedMobs()
+    }
+
+    fun setStage(stage: Stage) {
+        this.stage = stage
+    }
+
+    fun setKills(kills: Int) {
+        currentKills = kills
+    }
+
     private fun changeTier(tile: TileEndWell, stage: Stage) {
-        this.currentKills = 0
+        currentKills = 0
         this.stage = stage
         tile.setTimer(this.stage.getMaxTime())
+        if (!tile.world.isRemote)
+            NetworkHelper.updateClientsWithinRange(currentKills, getKillsNeeded(), tile)
     }
 
     fun getCurrentKills() = currentKills
 
-    fun addKills(value: Int) {
+    fun addKills(value: Int, tile: TileEndWell) {
         currentKills += value
+        if (!tile.world.isRemote)
+            NetworkHelper.updateClientsWithinRange(currentKills, getKillsNeeded(), tile)
     }
 
     abstract fun getTierMobs(tile: TileEndWell): Array<out EntityLiving>
@@ -81,8 +102,8 @@ abstract class WellTier {
         wellData.setInteger("kills", getCurrentKills())
         wellData.setInteger("stage", stage.ordinal)
         nbt.setTag("end_well_data", wellData)
-        mobSpawnerHelper!!.writeToNBT(nbt)
-        bossTracker!!.writeToNBT(nbt)
+        mobSpawnerHelper?.writeToNBT(nbt)
+        bossTracker?.writeToNBT(nbt)
     }
 
     fun readFromNBT(nbt: NBTTagCompound) {
@@ -90,7 +111,7 @@ abstract class WellTier {
         val wellData = nbt.getTag("end_well_data") as NBTTagCompound
         currentKills = wellData.getInteger("kills")
         stage = STAGE_VALUES[wellData.getInteger("stage")]
-        mobSpawnerHelper!!.readFromNBT(nbt)
-        bossTracker!!.readFromNBT(nbt)
+        mobSpawnerHelper?.readFromNBT(nbt)
+        bossTracker?.readFromNBT(nbt)
     }
 }

@@ -15,7 +15,9 @@ import net.minecraftforge.fml.relauncher.Side
 object TextHandler {
     private val mc = FMLClientHandler.instance().client
 
-    @JvmStatic @SubscribeEvent fun renderOverlay(event: RenderGameOverlayEvent.Text) {
+    @JvmStatic
+    @SubscribeEvent
+    fun renderOverlay(event: RenderGameOverlayEvent.Text) {
         val player = mc.player ?: return
         val pos = RangeUtil.isEntityNearWell(player, true)
         if (pos != null) {
@@ -28,8 +30,10 @@ object TextHandler {
                 event.left.add(I18n.format(stage.getMessage()))
 
                 event.left.add(I18n.format("event.minewell.timer", createTimer(tile.getTimer())))
-                if (tier.getKillsNeeded() > 0)
-                    event.left.add(I18n.format("event.minewell.kills_needed", tier.getCurrentKills(), tier.getKillsNeeded()))
+
+                if (stage.displayHUDBar())
+                    event.left.add(I18n.format("event.minewell.kills_needed", tier.getCurrentKills(),
+                            tier.getKillsNeeded()))
                 return
             }
         }

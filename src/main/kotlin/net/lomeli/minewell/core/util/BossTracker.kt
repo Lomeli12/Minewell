@@ -31,17 +31,23 @@ class BossTracker(private val bossBaes: Array<out EntityLiving>) {
                 it.remove()
             }
         }
-        spawnBosses(tile)
+        if (!tile.world.isRemote)
+            spawnBosses(tile)
         if (mobList.size > 0) {
             val it = mobList.iterator()
             while (it.hasNext()) {
                 val boss = it.next()
                 if (boss.isDead) {
                     it.remove()
-                    tier.addKills(1)
+                    tier.addKills(1, tile)
                 }
             }
         }
+    }
+
+    fun destroyTrackedMobs() {
+        for (mob in mobList)
+            mob.setDead()
     }
 
     private fun spawnBosses(tile: TileEndWell) {
@@ -52,9 +58,10 @@ class BossTracker(private val bossBaes: Array<out EntityLiving>) {
             if (!Strings.isNullOrEmpty(id)) {
                 val nbt = NBTTagCompound()
                 entityBase.writeToNBT(nbt)
-                val entity = EntityList.createEntityFromNBT(nbt, tile.world)
-                if (entity is EntityLiving)
-                    spawnBoss(entity, tile)
+                nbt.setString("id", id!!)
+                val entityAttempt = EntityList.createEntityFromNBT(nbt, tile.world)
+                if (entityAttempt is EntityLiving)
+                    spawnBoss(entityAttempt, tile)
             }
         }
         hasSpawned = true

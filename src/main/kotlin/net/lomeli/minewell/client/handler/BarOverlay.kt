@@ -77,7 +77,7 @@ object BarOverlay {
 
         val progress = tier.getCurrentKills().toFloat() / tier.getKillsNeeded().toFloat()
         val width = MathHelper.floor(182f * progress)
-        //if (width > 0)
-        RenderHelper.drawTexturedModalRect(xPos, yPos, 0f, 0, 7, width, 7)
+        if (width > 0)
+            RenderHelper.drawTexturedModalRect(xPos, yPos, 0f, 0, 7, width, 7)
     }
 }

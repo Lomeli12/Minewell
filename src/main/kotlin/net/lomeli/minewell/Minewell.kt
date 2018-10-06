@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.SidedProxy
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper
 
 @Mod(modid = Minewell.MOD_ID, name = Minewell.MOD_NAME, version = Minewell.VERSION, modLanguage = Minewell.LANGUAGE,
         modLanguageAdapter = Minewell.KOTLIN_ADAPTER)
@@ -27,6 +28,7 @@ object Minewell {
     val debug = Launch.blackboard.get(key = "fml.deobfuscatedEnvironment") as Boolean
 
     lateinit var log: Logger
+    lateinit var packetHandler: SimpleNetworkWrapper
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {

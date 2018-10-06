@@ -55,6 +55,11 @@ class MobSpawnerHelper(private val entityList: Array<out EntityLiving>,
         }
     }
 
+    fun destroyTrackedMobs() {
+        for (mob in mobList)
+            mob.setDead()
+    }
+
     private fun spawnNewMob(tile: TileEndWell) {
         for (attempt in 0..4) {
             val position = getSpawnPoint(tile)

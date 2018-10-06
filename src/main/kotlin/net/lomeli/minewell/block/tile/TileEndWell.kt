@@ -1,6 +1,8 @@
 package net.lomeli.minewell.block.tile
 
 import com.google.common.base.Strings
+import net.lomeli.minewell.core.helpers.NetworkHelper
+import net.lomeli.minewell.core.util.RangeUtil
 import net.lomeli.minewell.potion.ModPotions
 import net.lomeli.minewell.well.TierRegistry
 import net.lomeli.minewell.well.WellTier
@@ -50,15 +52,19 @@ class TileEndWell : TileEntity(), ITickable {
                 }
             }
 
-            eventTier!!.updateTick(this)
+            eventTier?.updateTick(this)
 
             if (radius < MAX_RADIUS) {
                 radius += RADIUS_RATE
                 if (radius > MAX_RADIUS)
                     radius = MAX_RADIUS
             }
-            if (timer <= 0)
+            if (timer <= 0) {
+                eventTier?.clearMobs()
                 eventTier = null
+                if (!world.isRemote)
+                    NetworkHelper.updateClientsWithinRange(0, 0, this)
+            }
             this.markDirty()
         } else {
             if (radius > 0f)
@@ -113,8 +119,7 @@ class TileEndWell : TileEntity(), ITickable {
     override fun writeToNBT(nbt: NBTTagCompound): NBTTagCompound {
         nbt.setInteger("timer", timer)
         nbt.setFloat("radius", radius)
-        if (eventTier != null)
-            eventTier!!.writeToNBT(nbt)
+        eventTier?.writeToNBT(nbt)
         return super.writeToNBT(nbt)
     }
 

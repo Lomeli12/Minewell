@@ -11,7 +11,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
 @Mod.EventBusSubscriber(modid = Minewell.MOD_ID)
 object EntityEvents {
-
     @JvmStatic
     @SubscribeEvent
     fun livingDeathEvent(event: LivingDeathEvent) {
@@ -20,7 +19,7 @@ object EntityEvents {
             if (entity.isPotionActive(ModPotions.LIGHT) && event.source.trueSource is EntityPlayer) {
                 val pos = RangeUtil.isEntityNearWell(entity, true)
                 if (pos != null) {
-                    val orbLight = EntityLight(entity.world, entity.posX, entity.posY, entity.posZ, pos)
+                    val orbLight = EntityLight(entity.world, entity.posX, entity.posY + (entity.height / 2), entity.posZ, pos)
                     if (!entity.world.isRemote)
                         entity.world.spawnEntity(orbLight)
                     //TODO: Loot Tables for hi-end drops
