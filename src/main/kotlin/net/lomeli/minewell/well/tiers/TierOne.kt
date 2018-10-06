@@ -1,5 +1,7 @@
 package net.lomeli.minewell.well.tiers
 
+import net.lomeli.minewell.core.helpers.MobSpawnerHelper
+import net.lomeli.minewell.core.util.BossTracker
 import net.lomeli.minewell.well.Stage
 import net.lomeli.minewell.well.WellTier
 import net.minecraft.entity.EntityLiving
@@ -11,6 +13,11 @@ import net.minecraft.potion.PotionEffect
 import net.minecraft.world.World
 
 class TierOne : WellTier() {
+
+    init {
+        mobSpawnerHelper = MobSpawnerHelper(getTierMobs(), getTierPotionEffects(), 30, 5)
+        bossTracker = BossTracker(getTierBosses())
+    }
 
     override fun getTierMobs(): Array<Class<out EntityLiving>> =
             arrayOf(EntityZombie::class.java, EntitySkeleton::class.java, EntityZombieVillager::class.java)

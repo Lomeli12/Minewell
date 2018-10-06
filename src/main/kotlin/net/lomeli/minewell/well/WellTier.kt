@@ -15,8 +15,6 @@ abstract class WellTier {
     protected var mobSpawnerHelper: MobSpawnerHelper? = null
 
     open fun updateTick(tile: TileEndWell) {
-        if (mobSpawnerHelper == null)
-            mobSpawnerHelper = MobSpawnerHelper(tile, getTierMobs(), getTierPotionEffects(), 30, 5)
         when (stage) {
             Stage.STAGE_ONE_CHARGING -> {
                 if (tile.getTimer() <= 0)
@@ -45,7 +43,6 @@ abstract class WellTier {
             }
             Stage.BOSS_CHARGING -> {
                 if (tile.getTimer() <= 0) {
-                    bossTracker = BossTracker(getTierBosses(tile.world))
                     changeTier(tile, Stage.BOSS)
                 }
             }
