@@ -3,7 +3,6 @@ package net.lomeli.minewell.core.util
 import net.lomeli.minewell.block.tile.MAX_DISTANCE
 import net.lomeli.minewell.block.tile.TileEndWell
 import net.minecraft.entity.Entity
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
 
 object RangeUtil {

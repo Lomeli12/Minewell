@@ -13,8 +13,8 @@ import net.minecraftforge.fml.relauncher.SideOnly
 
 class EntityLight(world: World) : Entity(world) {
     private val SPEED = 1.0
-    var targetPos: BlockPos? = null
-    val moveHelper = SimpleMoveHelper(this)
+    private var targetPos: BlockPos? = null
+    private val moveHelper = SimpleMoveHelper(this)
 
     init {
         setSize(0.25f, 0.25f)
