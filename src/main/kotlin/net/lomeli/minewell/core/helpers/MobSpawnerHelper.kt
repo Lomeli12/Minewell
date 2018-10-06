@@ -28,7 +28,7 @@ class MobSpawnerHelper(private val tile: TileEndWell, private val mobClassList: 
             }
 
             // Spawn new mobs in large groups
-            if (mobList.size < maxNumberOfMobs) {
+            if (mobList.size < maxNumberOfMobs && !tile.world.isRemote) {
                 for (i in 1..spawnSise) {
                     spawnNewMob()
                     if (mobList.size == maxNumberOfMobs)
@@ -52,6 +52,8 @@ class MobSpawnerHelper(private val tile: TileEndWell, private val mobClassList: 
                 entitySpawned.addPotionEffect(PotionEffect(ModPotions.LIGHT, Int.MAX_VALUE))
                 for (effect in potionEffects)
                     entitySpawned.addPotionEffect(effect)
+
+                mobList.add(entitySpawned)
                 break
             }
         }

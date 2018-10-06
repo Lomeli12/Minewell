@@ -35,7 +35,7 @@ class EntityLight(world: World) : Entity(world) {
         moveHelper.onEntityUpdate()
         if (targetPos == null || world.getTileEntity(targetPos!!) !is TileEndWell) setDead()
 
-        if (!world.isRemote && targetPos != null) {
+        if (targetPos != null) {
             val vec3d = Vec3d(posX, posY, posZ)
             val vec3d1 = Vec3d(posX + motionX, posY + motionY, posZ + motionZ)
             val result = world.rayTraceBlocks(vec3d, vec3d1)
