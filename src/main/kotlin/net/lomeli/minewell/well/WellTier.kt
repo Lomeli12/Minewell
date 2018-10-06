@@ -2,14 +2,17 @@ package net.lomeli.minewell.well
 
 import net.lomeli.minewell.block.tile.TileEndWell
 import net.lomeli.minewell.core.helpers.MobSpawnerHelper
+import net.lomeli.minewell.core.util.BossTracker
 import net.minecraft.entity.EntityLiving
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.potion.PotionEffect
+import net.minecraft.world.World
 
 abstract class WellTier {
     private var stage = Stage.STAGE_ONE_CHARGING
     private var currentKills = 0
     private var mobSpawnerHelper: MobSpawnerHelper? = null
+    private var bossTracker: BossTracker? = null
 
     open fun updateTick(tile: TileEndWell) {
         if (mobSpawnerHelper == null)
@@ -42,12 +45,12 @@ abstract class WellTier {
             }
             Stage.BOSS_CHARGING -> {
                 if (tile.getTimer() <= 0) {
-
+                    bossTracker = BossTracker(getTierBosses(tile.world))
                     changeTier(tile, Stage.BOSS)
                 }
             }
             Stage.BOSS -> {
-
+                bossTracker!!.updateTracker(this, tile)
             }
         }
     }
@@ -69,7 +72,7 @@ abstract class WellTier {
     abstract fun getKillsNeeded(): Int
     abstract fun getUnlocalizedName(): String
     abstract fun getRegistryName(): String
-    abstract fun getTierBoss(): Array<EntityLiving>
+    abstract fun getTierBosses(world: World): Array<out EntityLiving>
 
     fun getCurrentStage(): Stage = stage
 
