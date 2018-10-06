@@ -84,11 +84,12 @@ abstract class WellTier {
         for (player in playerList) {
             val distance = player.getDistance(pos.x.toDouble(), pos.y - 2.0, pos.z.toDouble())
             if (distance <= MAX_RADIUS) {
+                if (!world.isRemote)
+                    player.sendMessage(TextComponentTranslation("event.minewell.success"))
                 val rewards = getRandomRewards(world.rand)
                 if (rewards.isNotEmpty()) {
                     for (item in rewards) {
                         if (!world.isRemote) {
-                            player.sendMessage(TextComponentTranslation("event.minewell.success"))
                             val entity = EntityItem(world, player.posX, player.posY, player.posZ, item)
                             world.spawnEntity(entity)
                         }
