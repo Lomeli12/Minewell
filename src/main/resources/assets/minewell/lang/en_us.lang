@@ -28,5 +28,6 @@ event.minewell.stage.boss.objective=Defeat the Ender Champion
 
 event.minewell.charge=Charge Progress
 event.minewell.timer=Time Left: %s
+event.minewell.kills_needed=%s out of %s.
 
 entity.minewell.light_orb.name=Orb of Light
