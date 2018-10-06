@@ -82,6 +82,8 @@ abstract class WellTier {
         wellData.setInteger("kills", getCurrentKills())
         wellData.setInteger("stage", stage.ordinal)
         nbt.setTag("end_well_data", wellData)
+        mobSpawnerHelper!!.writeToNBT(nbt)
+        bossTracker!!.writeToNBT(nbt)
     }
 
     fun readFromNBT(nbt: NBTTagCompound) {
@@ -89,5 +91,7 @@ abstract class WellTier {
         val wellData = nbt.getTag("end_well_data") as NBTTagCompound
         currentKills = wellData.getInteger("kills")
         stage = STAGE_VALUES[wellData.getInteger("stage")]
+        mobSpawnerHelper!!.readFromNBT(nbt)
+        bossTracker!!.readFromNBT(nbt)
     }
 }
