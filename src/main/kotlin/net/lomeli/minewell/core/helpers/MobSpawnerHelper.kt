@@ -94,9 +94,10 @@ class MobSpawnerHelper(private val entityList: Array<WellEnemy>,
     private fun getRandomEnemy(): EntityLiving {
         var entity: EntityLiving? = null
         while (entity == null) {
-            val entry = entityList[rand.nextInt(entityList.size)]
-            if (entry.getChance() <= rand.nextFloat())
-                entity = entry.getEntityBase()
+            for (entry in entityList) {
+                if (entry.getChance() >= rand.nextFloat())
+                    entity = entry.getEntityBase()
+            }
         }
         return entity
     }

@@ -103,7 +103,7 @@ abstract class WellTier {
     fun getRandomRewards(rand: Random): Array<ItemStack> {
         val rewards = ArrayList<ItemStack>()
         for (reward in possibleRewards()) {
-            if (reward.getChance() <= rand.nextFloat())
+            if (reward.getChance() >= rand.nextFloat())
                 rewards.add(reward.getStack())
         }
         return rewards.toTypedArray()
