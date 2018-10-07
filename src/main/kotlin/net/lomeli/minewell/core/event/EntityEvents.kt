@@ -6,6 +6,7 @@ import net.lomeli.minewell.entity.EntityLight
 import net.lomeli.minewell.potion.ModPotions
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraftforge.event.entity.living.LivingDeathEvent
+import net.minecraftforge.event.entity.living.LivingDropsEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
@@ -25,6 +26,16 @@ object EntityEvents {
                     //TODO: Loot Tables for hi-end drops
                 }
             }
+        }
+    }
+
+    @JvmStatic
+    @SubscribeEvent
+    fun entityDropEvent(event: LivingDropsEvent) {
+        if (event.entityLiving !is EntityPlayer) {
+            val entity = event.entityLiving
+            if (entity.isPotionActive(ModPotions.LIGHT))
+                event.isCanceled = true
         }
     }
 }

@@ -3,7 +3,10 @@ package net.lomeli.minewell.core.helpers
 import com.google.common.base.Strings
 import net.lomeli.minewell.block.tile.MAX_DISTANCE
 import net.lomeli.minewell.block.tile.TileEndWell
+import net.lomeli.minewell.core.util.RangeUtil
 import net.lomeli.minewell.potion.ModPotions
+import net.lomeli.minewell.well.WellEnemy
+import net.lomeli.minewell.well.WellTier
 import net.minecraft.entity.EntityList
 import net.minecraft.entity.EntityLiving
 import net.minecraft.nbt.NBTTagCompound
@@ -15,7 +18,7 @@ import net.minecraft.world.World
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MobSpawnerHelper(private val entityList: Array<out EntityLiving>,
+class MobSpawnerHelper(private val entityList: Array<WellEnemy>,
                        private val maxNumberOfMobs: Int,
                        private val spawnSise: Int) {
     private val rand = Random()
@@ -63,7 +66,7 @@ class MobSpawnerHelper(private val entityList: Array<out EntityLiving>,
     private fun spawnNewMob(tile: TileEndWell) {
         for (attempt in 0..4) {
             val position = getSpawnPoint(tile)
-            val mobBase = entityList[rand.nextInt(entityList.size)]
+            val mobBase = getRandomEnemy()
             mobBase.setUniqueId(MathHelper.getRandomUUID(rand))
             val id = getEntityName(mobBase)
             if (!Strings.isNullOrEmpty(id)) {
@@ -88,13 +91,29 @@ class MobSpawnerHelper(private val entityList: Array<out EntityLiving>,
         }
     }
 
+    private fun getRandomEnemy(): EntityLiving {
+        var entity: EntityLiving? = null
+        while (entity == null) {
+            val entry = entityList[rand.nextInt(entityList.size)]
+            if (entry.getChance() <= rand.nextFloat())
+                entity = entry.getEntityBase()
+        }
+        return entity
+    }
+
     private fun getEntityName(entity: EntityLiving): String? = EntityList.getKey(entity)?.toString()
 
     private fun getSpawnPoint(tile: TileEndWell): Vec3d {
-        val d0 = tile.pos.x.toDouble() + (tile.world.rand.nextDouble() - tile.world.rand.nextDouble()) * MAX_DISTANCE
-        val d1 = (tile.pos.y + tile.world.rand.nextInt(3) - 1).toDouble()
-        val d2 = tile.pos.z.toDouble() + (tile.world.rand.nextDouble() - tile.world.rand.nextDouble()) * MAX_DISTANCE
-        return Vec3d(d0, d1, d2)
+        var spawnPoint: Vec3d? = null
+        while (spawnPoint == null) {
+            val d0 = tile.pos.x.toDouble() + (tile.world.rand.nextDouble() - tile.world.rand.nextDouble()) * MAX_DISTANCE
+            val d1 = (tile.pos.y + tile.world.rand.nextInt(3) - 1).toDouble()
+            val d2 = tile.pos.z.toDouble() + (tile.world.rand.nextDouble() - tile.world.rand.nextDouble()) * MAX_DISTANCE
+            val distance = RangeUtil.getDistance(d0, d1, d2, tile.pos.x.toDouble(), tile.pos.y.toDouble(), tile.pos.z.toDouble())
+            if (distance > tile.getMaxRadius())
+                spawnPoint = Vec3d(d0, d1, d2)
+        }
+        return spawnPoint
     }
 
     private fun spawnMonsterAtLocation(tile: TileEndWell, entity: EntityLiving, x: Double, y: Double, z: Double): EntityLiving? {

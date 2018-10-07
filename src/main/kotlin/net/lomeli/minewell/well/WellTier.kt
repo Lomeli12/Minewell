@@ -24,7 +24,7 @@ abstract class WellTier {
     private var failure = true
 
     open fun initTier(tile: TileEndWell) {
-        mobSpawnerHelper = MobSpawnerHelper(getTierMobs(tile), 30, 5)
+        mobSpawnerHelper = MobSpawnerHelper(getTierMobs(tile), 15, 5)
         bossTracker = BossTracker(getTierBosses(tile))
     }
 
@@ -138,7 +138,7 @@ abstract class WellTier {
             NetworkHelper.updateClientsWithinRange(currentKills, getKillsNeeded(), tile)
     }
 
-    abstract fun getTierMobs(tile: TileEndWell): Array<out EntityLiving>
+    abstract fun getTierMobs(tile: TileEndWell): Array<WellEnemy>
     abstract fun getKillsNeeded(): Int
     abstract fun getUnlocalizedName(): String
     abstract fun getRegistryName(): String

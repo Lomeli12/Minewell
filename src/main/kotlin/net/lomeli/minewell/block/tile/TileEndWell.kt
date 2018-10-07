@@ -100,7 +100,7 @@ class TileEndWell : TileEntity(), ITickable {
         if (playerList.isEmpty()) return
         for (player in playerList) {
             val distance = player.getDistance(pos.x.toDouble(), pos.y - 2.0, pos.z.toDouble())
-            if (distance <= MAX_RADIUS)
+            if (distance <= MAX_RADIUS || distance > MAX_DISTANCE)
                 player.addPotionEffect(PotionEffect(ModPotions.SKY_TOUCH, 100))
             else if (distance <= MAX_DISTANCE &&
                     !(player.isPotionActive(ModPotions.SKY_TOUCH) || player.isPotionActive(ModPotions.HARMONY)))
@@ -124,6 +124,8 @@ class TileEndWell : TileEntity(), ITickable {
     }
 
     fun getTimer(): Int = timer
+
+    fun getMaxRadius(): Float = MAX_RADIUS
 
     override fun readFromNBT(nbt: NBTTagCompound) {
         if (nbt.hasKey("timer", 3))
