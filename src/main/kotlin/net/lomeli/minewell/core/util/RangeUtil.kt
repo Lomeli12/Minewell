@@ -3,7 +3,11 @@ package net.lomeli.minewell.core.util
 import net.lomeli.minewell.block.tile.MAX_DISTANCE
 import net.lomeli.minewell.block.tile.TileEndWell
 import net.minecraft.entity.Entity
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.MathHelper
+import net.minecraft.world.World
 
 object RangeUtil {
     fun isEntityNearWell(entity: Entity, activeWell: Boolean): BlockPos? {
@@ -28,5 +32,26 @@ object RangeUtil {
                     }
                 }
         return null
+    }
+
+    fun getDistance(x: Double, y: Double, z: Double, targetX: Double, targetY: Double, targetZ: Double): Double {
+        val d0 = targetX - x
+        val d1 = targetY - 1
+        val d2 = targetZ - z
+        return MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2).toDouble()
+    }
+
+    fun getPlayersInRange(maxRange: Double, pos: BlockPos, world: World): ArrayList<EntityPlayer> {
+        val list = ArrayList<EntityPlayer>()
+        val range = AxisAlignedBB(pos.x.toDouble(), pos.y - 2.0, pos.z.toDouble(), pos.x + 1.0, pos.y - 1.0, pos.z + 1.0)
+                .grow(maxRange)
+        val playerList = world.getEntitiesWithinAABB(EntityPlayer::class.java, range)
+        if (playerList.isNotEmpty()) {
+            for (player in playerList) {
+                val distance = player.getDistance(pos.x.toDouble(), pos.y - 2.0, pos.z.toDouble())
+                if (distance <= maxRange) list.add(player)
+            }
+        }
+        return list
     }
 }

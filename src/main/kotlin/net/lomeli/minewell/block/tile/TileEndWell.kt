@@ -2,16 +2,21 @@ package net.lomeli.minewell.block.tile
 
 import com.google.common.base.Strings
 import net.lomeli.minewell.core.helpers.NetworkHelper
+import net.lomeli.minewell.core.util.RangeUtil
 import net.lomeli.minewell.potion.ModPotions
+import net.lomeli.minewell.well.Stage
 import net.lomeli.minewell.well.TierRegistry
 import net.lomeli.minewell.well.WellTier
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.SoundEvents
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.network.NetworkManager
 import net.minecraft.network.play.server.SPacketUpdateTileEntity
 import net.minecraft.potion.PotionEffect
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ITickable
+import net.minecraft.util.SoundCategory
+import net.minecraft.util.SoundEvent
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.world.EnumDifficulty
@@ -54,10 +59,15 @@ class TileEndWell : TileEntity(), ITickable {
 
             eventTier!!.updateTick(this)
 
-            if (radius < MAX_RADIUS) {
-                radius += RADIUS_RATE
-                if (radius > MAX_RADIUS)
-                    radius = MAX_RADIUS
+            if (eventTier!!.getCurrentStage() != Stage.BOSS_CHARGING && eventTier!!.getCurrentStage() != Stage.BOSS) {
+                if (radius < MAX_RADIUS) {
+                    radius += RADIUS_RATE
+                    if (radius > MAX_RADIUS)
+                        radius = MAX_RADIUS
+                }
+            } else {
+                if (radius > 0f)
+                    radius -= RADIUS_RATE
             }
 
             if (timer <= 0) {
@@ -65,7 +75,7 @@ class TileEndWell : TileEntity(), ITickable {
                 if (!world.isRemote) {
                     NetworkHelper.updateClientsWithinRange(0, 0, this)
                     if (eventTier!!.isFailure()) {
-                        val players = getPlayersInRange()
+                        val players = RangeUtil.getPlayersInRange(MAX_DISTANCE.toDouble(), pos, world)
                         if (players.isNotEmpty()) {
                             for (player in players)
                                 player.sendMessage(TextComponentTranslation("event.minewell.failure"))
@@ -81,22 +91,8 @@ class TileEndWell : TileEntity(), ITickable {
         }
     }
 
-    fun getPlayersInRange(): ArrayList<EntityPlayer> {
-        val list = ArrayList<EntityPlayer>()
-        val range = AxisAlignedBB(pos.x.toDouble(), pos.y - 2.0, pos.z.toDouble(), pos.x + 1.0, pos.y - 1.0, pos.z + 1.0)
-                .grow(MAX_DISTANCE.toDouble())
-        val playerList = world.getEntitiesWithinAABB(EntityPlayer::class.java, range)
-        if (playerList.isNotEmpty()) {
-            for (player in playerList) {
-                val distance = player.getDistance(pos.x.toDouble(), pos.y - 2.0, pos.z.toDouble())
-                if (distance <= MAX_DISTANCE) list.add(player)
-            }
-        }
-        return list
-    }
-
     fun giveTouchEffects() {
-        val playerList = getPlayersInRange()
+        val playerList = RangeUtil.getPlayersInRange(MAX_DISTANCE + 5.0, pos, world)
         if (playerList.isEmpty()) return
         for (player in playerList) {
             val distance = player.getDistance(pos.x.toDouble(), pos.y - 2.0, pos.z.toDouble())
@@ -110,8 +106,13 @@ class TileEndWell : TileEntity(), ITickable {
 
     fun setTier(tier: WellTier) {
         if (!isWellActivated() && world.difficulty != EnumDifficulty.PEACEFUL) {
+            world.playSound(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), SoundEvents.ENTITY_ENDERDRAGON_AMBIENT,
+                    SoundCategory.HOSTILE, 1f, ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.2f + 1.0f), false)
             eventTier = tier
             setTimer(tier.getCurrentStage().getMaxTime())
+
+            if (!world.isRemote)
+                NetworkHelper.updateClientsWithinRange(eventTier!!.getCurrentKills(), eventTier!!.getKillsNeeded(), this)
         }
     }
 
