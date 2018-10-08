@@ -7,7 +7,6 @@ import net.lomeli.minewell.potion.ModPotions
 import net.lomeli.minewell.well.Stage
 import net.lomeli.minewell.well.TierRegistry
 import net.lomeli.minewell.well.WellTier
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.SoundEvents
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.network.NetworkManager
@@ -16,7 +15,6 @@ import net.minecraft.potion.PotionEffect
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ITickable
 import net.minecraft.util.SoundCategory
-import net.minecraft.util.SoundEvent
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.world.EnumDifficulty
@@ -24,10 +22,10 @@ import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 
 const val MAX_DISTANCE = 20f
+const val MAX_RADIUS = 5.5f
 
 class TileEndWell : TileEntity(), ITickable {
-    private val MAX_RADIUS = 5.5f
-    private val RADIUS_RATE = 0.05f
+    private val radiusRate = 0.05f
     private var eventTier: WellTier? = null
     private var tierName: String? = null
     private var tierData: NBTTagCompound? = null
@@ -61,13 +59,13 @@ class TileEndWell : TileEntity(), ITickable {
 
             if (eventTier!!.getCurrentStage() != Stage.BOSS_CHARGING && eventTier!!.getCurrentStage() != Stage.BOSS) {
                 if (radius < MAX_RADIUS) {
-                    radius += RADIUS_RATE
+                    radius += radiusRate
                     if (radius > MAX_RADIUS)
                         radius = MAX_RADIUS
                 }
             } else {
                 if (radius > 0f)
-                    radius -= RADIUS_RATE
+                    radius -= radiusRate
             }
 
             if (timer <= 0) {
@@ -87,7 +85,7 @@ class TileEndWell : TileEntity(), ITickable {
             this.markDirty()
         } else {
             if (radius > 0f)
-                radius -= RADIUS_RATE
+                radius -= radiusRate
         }
     }
 
@@ -125,8 +123,6 @@ class TileEndWell : TileEntity(), ITickable {
     }
 
     fun getTimer(): Int = timer
-
-    fun getMaxRadius(): Float = MAX_RADIUS
 
     override fun readFromNBT(nbt: NBTTagCompound) {
         if (nbt.hasKey("timer", 3))

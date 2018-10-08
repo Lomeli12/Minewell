@@ -2,6 +2,7 @@ package net.lomeli.minewell.core.helpers
 
 import com.google.common.base.Strings
 import net.lomeli.minewell.block.tile.MAX_DISTANCE
+import net.lomeli.minewell.block.tile.MAX_RADIUS
 import net.lomeli.minewell.block.tile.TileEndWell
 import net.lomeli.minewell.core.util.RangeUtil
 import net.lomeli.minewell.potion.ModPotions
@@ -111,7 +112,7 @@ class MobSpawnerHelper(private val entityList: Array<WellEnemy>,
             val d1 = (tile.pos.y + tile.world.rand.nextInt(3) - 1).toDouble()
             val d2 = tile.pos.z.toDouble() + (tile.world.rand.nextDouble() - tile.world.rand.nextDouble()) * MAX_DISTANCE
             val distance = RangeUtil.get2DDistance(d0, d2, tile.pos.x.toDouble(), tile.pos.z.toDouble())
-            if (distance > tile.getMaxRadius())
+            if (distance > MAX_RADIUS)
                 spawnPoint = Vec3d(d0, d1, d2)
         }
         return spawnPoint
