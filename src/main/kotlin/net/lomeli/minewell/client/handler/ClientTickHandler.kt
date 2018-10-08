@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.Side
 @Mod.EventBusSubscriber(modid = Minewell.MOD_ID, value = Side.CLIENT)
 object ClientTickHandler {
     var ticksInGame = 0
-    var midGameTick = 0f
+    var renderTick = 0f
 
     @JvmStatic
     @SubscribeEvent
@@ -28,6 +28,6 @@ object ClientTickHandler {
     fun renderTick(event: TickEvent.RenderTickEvent) {
         if (event.phase == TickEvent.Phase.END)
             return
-        midGameTick = event.renderTickTime
+        renderTick = event.renderTickTime
     }
 }

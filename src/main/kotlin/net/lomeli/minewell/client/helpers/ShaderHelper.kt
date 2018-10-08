@@ -35,7 +35,7 @@ object ShaderHelper {
         ARBShaderObjects.glUseProgramObjectARB(shader)
 
         if (shader != 0) {
-            val frameTime = ClientTickHandler.ticksInGame + ClientTickHandler.midGameTick
+            val frameTime = ClientTickHandler.ticksInGame + ClientTickHandler.renderTick
             val newFrame = frameTime != prevTime[shader]
 
             if (newFrame) {
