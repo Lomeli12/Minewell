@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 @Mod.EventBusSubscriber(modid = Minewell.MOD_ID)
 object ModItems {
     val END_WELL_ITEM = ItemEndWell()
+    val LIGHT_CHARGE = ItemLightCharge()
 
     @JvmStatic @SubscribeEvent fun registerModItems(event: RegistryEvent.Register<Item>) {
         registerBlockItems(event)
@@ -19,10 +20,11 @@ object ModItems {
 
     fun registerBlockItems(event: RegistryEvent.Register<Item>) {
         Minewell.log.logInfo("Registering Block Items")
-        event.registry.register(END_WELL_ITEM.setRegistryName(ModBlocks.END_WELL.registryName))
+        event.registry.register(END_WELL_ITEM)
     }
 
     fun registerItems(event: RegistryEvent.Register<Item>) {
         Minewell.log.logInfo("Registering Items")
+        event.registry.register(LIGHT_CHARGE)
     }
 }

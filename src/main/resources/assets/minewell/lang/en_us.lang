@@ -1,4 +1,13 @@
+# Creative Tab
+itemGroup.minewell=Minewell
+
+# Blocks
 tile.minewell.end_well.name=End Well Core
+
+# Items
+item.minewell.light_charge.tier_one.name=Charge of Light - Tier I
+item.minewell.light_charge.tier_two.name=Charge of Light - Tier II
+item.minewell.light_charge.tier_three.name=Charge of Light - Tier III
 
 # Potions
 potion.minewell.sky_touch=Touch of Sky
