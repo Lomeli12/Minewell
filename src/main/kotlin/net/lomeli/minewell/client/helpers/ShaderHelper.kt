@@ -18,9 +18,6 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.stream.Collectors
 
-
-
-
 object ShaderHelper {
     private val VERT = ARBVertexShader.GL_VERTEX_SHADER_ARB
     private val FRAG = ARBFragmentShader.GL_FRAGMENT_SHADER_ARB

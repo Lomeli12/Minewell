@@ -12,9 +12,6 @@ import net.minecraftforge.fml.client.registry.ClientRegistry
 import net.minecraftforge.fml.client.registry.RenderingRegistry
 
 class ClientProxy : Proxy() {
-    private var currentKills = 0
-    private var killsNeeded = 0
-
     override fun preInit() {
         super.preInit()
         OBJLoader.INSTANCE.addDomain(Minewell.MOD_ID)
