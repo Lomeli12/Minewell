@@ -1,18 +1,18 @@
 package net.lomeli.minewell.core.helpers
 
 import com.google.common.base.Strings
+import net.lomeli.minewell.block.tile.EFFECT_RANGE
 import net.lomeli.minewell.block.tile.MAX_DISTANCE
 import net.lomeli.minewell.block.tile.MAX_RADIUS
 import net.lomeli.minewell.block.tile.TileEndWell
 import net.lomeli.minewell.core.util.RangeUtil
 import net.lomeli.minewell.potion.ModPotions
 import net.lomeli.minewell.well.WellEnemy
-import net.lomeli.minewell.well.WellTier
 import net.minecraft.entity.EntityList
 import net.minecraft.entity.EntityLiving
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.nbt.NBTTagList
 import net.minecraft.potion.PotionEffect
+import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
@@ -24,17 +24,17 @@ class MobSpawnerHelper(private val entityList: Array<WellEnemy>,
                        private val spawnSise: Int) {
     private val rand = Random()
     private val mobList = ArrayList<EntityLiving>()
-    private var updateIDs = ArrayList<UUID>()
+    private var wasTracking = false
 
     fun spawnMonsters(tile: TileEndWell) {
-        if (tile.world != null && updateIDs.isNotEmpty()) {
-            val it = updateIDs.iterator()
-            while (it.hasNext()) {
-                val id = it.next()
-                val entity = getEntityByUUID(tile.world, id)
-                if (entity != null && !entity.isDead)
+        if (tile.world != null && wasTracking) {
+            wasTracking = false
+            val entityList = tile.world.getEntitiesWithinAABB(EntityLiving::class.java,
+                    AxisAlignedBB(tile.pos.x.toDouble(), tile.pos.y.toDouble() - 2, tile.pos.z.toDouble(),
+                            tile.pos.x + 1.0, tile.pos.y - 1.0, tile.pos.z + 1.0).grow(EFFECT_RANGE))
+            for (entity in entityList) {
+                if (entity.isPotionActive(ModPotions.LIGHT))
                     mobList.add(entity)
-                it.remove()
             }
         }
         if (tile.getTimer() % 20 == 0) {
@@ -137,34 +137,12 @@ class MobSpawnerHelper(private val entityList: Array<WellEnemy>,
 
     fun readFromNBT(nbt: NBTTagCompound) {
         val compound = nbt.getCompoundTag("mob_spawner_data")
-        if (compound.hasKey("id_list", 9)) {
-            val list = nbt.getTagList("id_list", 10)
-            if (list.hasNoTags()) return
-            val it = list.iterator()
-            while (it.hasNext()) {
-                val tag = it.next() as NBTTagCompound
-                val least = tag.getLong("least")
-                val most = tag.getLong("most")
-                val id = UUID(most, least)
-                updateIDs.add(id)
-            }
-        }
+        wasTracking = compound.getBoolean("was_tracking")
     }
 
     fun writeToNBT(nbt: NBTTagCompound) {
         val compound = NBTTagCompound()
-        if (mobList.isEmpty()) return
-        val list = NBTTagList()
-        for (entity in mobList) {
-            if (!entity.isDead) {
-                val id = entity.uniqueID
-                val entityNBT = NBTTagCompound()
-                entityNBT.setLong("least", id.leastSignificantBits)
-                entityNBT.setLong("most", id.mostSignificantBits)
-                list.appendTag(entityNBT)
-            }
-        }
-        compound.setTag("id_list", list)
+        compound.setBoolean("was_tracking", mobList.isNotEmpty())
         nbt.setTag("mob_spawner_data", compound)
     }
 }
