@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraftforge.fml.common.network.NetworkRegistry
 
 object NetworkHelper {
-    fun updateClientsWithinRange(currentKills: Int, killsNeeded: Int, tile: TileEndWell) {
+    fun updateClientsWithinRange(tile: TileEndWell) {
         Minewell.packetHandler.sendToAllAround(createUpdatePacket(tile),
                 NetworkRegistry.TargetPoint(tile.world.provider.dimension,
                         tile.pos.x + 0.5, tile.pos.y + 0.5, tile.pos.z + 0.5, MAX_DISTANCE + 0.5))

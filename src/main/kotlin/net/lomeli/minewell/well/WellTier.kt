@@ -127,7 +127,7 @@ abstract class WellTier {
         this.stage = stage
         tile.setTimer(this.stage.getMaxTime())
         if (!tile.world.isRemote)
-            NetworkHelper.updateClientsWithinRange(currentKills, getKillsNeeded(), tile)
+            NetworkHelper.updateClientsWithinRange(tile)
     }
 
     fun getCurrentKills() = currentKills
@@ -135,7 +135,7 @@ abstract class WellTier {
     fun addKills(value: Int, tile: TileEndWell) {
         currentKills += value
         if (!tile.world.isRemote)
-            NetworkHelper.updateClientsWithinRange(currentKills, getKillsNeeded(), tile)
+            NetworkHelper.updateClientsWithinRange(tile)
     }
 
     abstract fun getTierMobs(tile: TileEndWell): Array<WellEnemy>

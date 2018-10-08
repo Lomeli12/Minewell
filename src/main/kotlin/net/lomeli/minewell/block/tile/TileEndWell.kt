@@ -71,7 +71,7 @@ class TileEndWell : TileEntity(), ITickable {
             if (timer <= 0) {
                 eventTier?.clearMobs()
                 if (!world.isRemote) {
-                    NetworkHelper.updateClientsWithinRange(0, 0, this)
+                    NetworkHelper.updateClientsWithinRange(this)
                     if (eventTier!!.isFailure()) {
                         val players = RangeUtil.getPlayersInRange(MAX_DISTANCE.toDouble(), pos, world)
                         if (players.isNotEmpty()) {
@@ -110,7 +110,7 @@ class TileEndWell : TileEntity(), ITickable {
             setTimer(tier.getCurrentStage().getMaxTime())
 
             if (!world.isRemote)
-                NetworkHelper.updateClientsWithinRange(eventTier!!.getCurrentKills(), eventTier!!.getKillsNeeded(), this)
+                NetworkHelper.updateClientsWithinRange(this)
         }
     }
 
