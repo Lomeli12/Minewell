@@ -23,12 +23,12 @@ class ItemLightCharge : ItemBase("light_charge") {
     }
 
     override fun getRarity(stack: ItemStack): EnumRarity {
-        when (stack.metadata) {
+        return when (stack.metadata) {
             0 -> EnumRarity.RARE
             1 -> EnumRarity.EPIC
-            2 -> EXOTIC
+            2 -> EXOTIC ?: super.getRarity(stack)
+            else -> super.getRarity(stack)
         }
-        return super.getRarity(stack)
     }
 
     fun getTierFromStack(stack: ItemStack): WellTier {
