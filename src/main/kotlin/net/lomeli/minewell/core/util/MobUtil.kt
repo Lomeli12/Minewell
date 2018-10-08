@@ -48,6 +48,11 @@ object MobUtil {
     private fun getRandomPlayerNearCrystal(pos: BlockPos, world: World): EntityPlayer? {
         val playerList = RangeUtil.getPlayersInRange(EFFECT_RANGE, pos, world)
         if (playerList.isEmpty()) return null
+        val it = playerList.iterator()
+        while (it.hasNext()) {
+            val player = it.next()
+            if (player.isCreative) it.remove()
+        }
         return if (playerList.size == 1) playerList[0] else playerList[world.rand.nextInt(playerList.size)]
     }
 }
