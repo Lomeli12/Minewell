@@ -29,26 +29,35 @@ class BlockEndWell : BlockBase("end_well", Material.GLASS) {
         this.blockSoundType = SoundType.STONE
     }
 
-    override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
+    override fun onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer,
                                   hand: EnumHand, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean {
-        val itemUsed = playerIn.getHeldItem(hand)
+        val itemUsed = player.getHeldItem(hand)
         if (itemUsed.item is ItemLightCharge) {
-            val tile = worldIn.getTileEntity(pos)
-            if (tile != null && tile is TileEndWell && !tile.isWellActivated()) {
-                if (worldIn.difficulty == EnumDifficulty.PEACEFUL) {
-                    if (!worldIn.isRemote)
-                        playerIn.sendMessage(TextComponentTranslation("event.minewell.peaceful"))
-                    return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ)
+            val tile = world.getTileEntity(pos)
+            if (tile is TileEndWell && !tile.isWellActivated()) {
+                if (world.difficulty == EnumDifficulty.PEACEFUL) {
+                    if (!world.isRemote)
+                        player.sendMessage(TextComponentTranslation("event.minewell.peaceful"))
+                    return super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ)
                 }
                 val tier = getTierFromCharge(itemUsed)
                 tier.initTier(tile)
                 tile.setTier(tier)
 
-                if (!playerIn.isCreative)
+                if (!player.isCreative)
                     itemUsed.shrink(1)
             }
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ)
+        return super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ)
+    }
+
+    override fun breakBlock(world: World, pos: BlockPos, state: IBlockState) {
+        val tile = world.getTileEntity(pos)
+        if (tile is TileEndWell && tile.isWellActivated()) {
+            val tier = tile.getTier()!!
+            tier.clearMobs()
+        }
+        super.breakBlock(world, pos, state)
     }
 
     private fun getTierFromCharge(stack: ItemStack): WellTier = ModItems.LIGHT_CHARGE.getTierFromStack(stack)
