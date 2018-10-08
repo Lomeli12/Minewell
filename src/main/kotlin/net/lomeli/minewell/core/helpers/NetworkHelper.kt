@@ -1,9 +1,9 @@
 package net.lomeli.minewell.core.helpers
 
 import net.lomeli.minewell.Minewell
-import net.lomeli.minewell.block.tile.MAX_DISTANCE
 import net.lomeli.minewell.block.tile.TileEndWell
 import net.lomeli.minewell.core.network.MessageUpdateTileState
+import net.lomeli.minewell.lib.MAX_DISTANCE
 import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraftforge.fml.common.network.NetworkRegistry
 
