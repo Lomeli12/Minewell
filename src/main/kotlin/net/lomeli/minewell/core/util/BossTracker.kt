@@ -76,6 +76,7 @@ class BossTracker(private val bossBaes: Array<out EntityLiving>) {
             if (entitySpawned != null) {
                 entitySpawned.forceSpawn = true
                 entitySpawned.enablePersistence()
+                entitySpawned.addPotionEffect(PotionEffect(ModPotions.LIGHT, Int.MAX_VALUE))
                 mobList.add(entitySpawned)
                 break
             }
@@ -83,10 +84,16 @@ class BossTracker(private val bossBaes: Array<out EntityLiving>) {
     }
 
     private fun getSpawnPoint(tile: TileEndWell): Vec3d {
-        val d0 = tile.pos.x.toDouble() + (tile.world.rand.nextDouble() - tile.world.rand.nextDouble()) * MAX_DISTANCE
-        val d1 = (tile.pos.y + tile.world.rand.nextInt(3) - 1).toDouble()
-        val d2 = tile.pos.z.toDouble() + (tile.world.rand.nextDouble() - tile.world.rand.nextDouble()) * MAX_DISTANCE
-        return Vec3d(d0, d1, d2)
+        var spawnPoint: Vec3d? = null
+        while (spawnPoint == null) {
+            val d0 = tile.pos.x.toDouble() + (tile.world.rand.nextDouble() - tile.world.rand.nextDouble()) * MAX_DISTANCE
+            val d1 = (tile.pos.y + tile.world.rand.nextInt(3) - 1).toDouble()
+            val d2 = tile.pos.z.toDouble() + (tile.world.rand.nextDouble() - tile.world.rand.nextDouble()) * MAX_DISTANCE
+            val distance = RangeUtil.get2DDistance(d0, d2, tile.pos.x.toDouble(), tile.pos.z.toDouble())
+            if (distance > tile.getMaxRadius())
+                spawnPoint = Vec3d(d0, d1, d2)
+        }
+        return spawnPoint
     }
 
     private fun spawnMonsterAtLocation(entity: EntityLiving, x: Double, y: Double, z: Double): EntityLiving? {

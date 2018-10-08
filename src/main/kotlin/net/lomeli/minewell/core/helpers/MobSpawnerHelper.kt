@@ -110,7 +110,7 @@ class MobSpawnerHelper(private val entityList: Array<WellEnemy>,
             val d0 = tile.pos.x.toDouble() + (tile.world.rand.nextDouble() - tile.world.rand.nextDouble()) * MAX_DISTANCE
             val d1 = (tile.pos.y + tile.world.rand.nextInt(3) - 1).toDouble()
             val d2 = tile.pos.z.toDouble() + (tile.world.rand.nextDouble() - tile.world.rand.nextDouble()) * MAX_DISTANCE
-            val distance = RangeUtil.getDistance(d0, d1, d2, tile.pos.x.toDouble(), tile.pos.y.toDouble(), tile.pos.z.toDouble())
+            val distance = RangeUtil.get2DDistance(d0, d2, tile.pos.x.toDouble(), tile.pos.z.toDouble())
             if (distance > tile.getMaxRadius())
                 spawnPoint = Vec3d(d0, d1, d2)
         }

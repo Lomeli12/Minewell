@@ -34,11 +34,10 @@ object RangeUtil {
         return null
     }
 
-    fun getDistance(x: Double, y: Double, z: Double, targetX: Double, targetY: Double, targetZ: Double): Double {
+    fun get2DDistance(x: Double, y: Double, targetX: Double, targetY: Double): Double {
         val d0 = targetX - x
-        val d1 = targetY - 1
-        val d2 = targetZ - z
-        return MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2).toDouble()
+        val d1 = targetY - y
+        return MathHelper.sqrt(d0 * d0 + d1 * d1).toDouble()
     }
 
     fun getPlayersInRange(maxRange: Double, pos: BlockPos, world: World): ArrayList<EntityPlayer> {
