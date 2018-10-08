@@ -69,9 +69,8 @@ class TileEndWellRenderer : TileEntitySpecialRenderer<TileEndWell>() {
 
     private fun renderWellEffects(tile: TileEndWell, x: Double, y: Double, z: Double, partialTicks: Float,
                                   destroyStage: Int, alpha: Float) {
-        if (ClientTickHandler.ticksInGame % 10 == 0 && tile.isWellActivated()) {
+        if (ClientTickHandler.ticksInGame % 10 == 0 && tile.isWellActivated())
             renderActivatedParticles(tile.pos)
-        }
         if (tile.radius > 0f)
             drawSphere(x + 0.5f, y - 1.5f, z + 0.5f, tile.radius)
     }
