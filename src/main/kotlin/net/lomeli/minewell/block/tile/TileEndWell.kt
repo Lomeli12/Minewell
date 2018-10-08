@@ -22,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 
 const val MAX_DISTANCE = 20f
+const val EFFECT_RANGE = MAX_DISTANCE + 5.0
 const val MAX_RADIUS = 5.5f
 
 class TileEndWell : TileEntity(), ITickable {
@@ -90,7 +91,7 @@ class TileEndWell : TileEntity(), ITickable {
     }
 
     fun giveTouchEffects() {
-        val playerList = RangeUtil.getPlayersInRange(MAX_DISTANCE + 5.0, pos, world)
+        val playerList = RangeUtil.getPlayersInRange(EFFECT_RANGE, pos, world)
         if (playerList.isEmpty()) return
         for (player in playerList) {
             val distance = player.getDistance(pos.x.toDouble(), pos.y - 2.0, pos.z.toDouble())
