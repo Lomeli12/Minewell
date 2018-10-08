@@ -1,7 +1,8 @@
-package net.lomeli.minewell.core.util
+package net.lomeli.minewell.core.helpers
 
 import com.google.common.base.Strings
 import net.lomeli.minewell.block.tile.TileEndWell
+import net.lomeli.minewell.core.util.MobUtil
 import net.lomeli.minewell.lib.EFFECT_RANGE
 import net.lomeli.minewell.potion.ModPotions
 import net.lomeli.minewell.well.WellTier
