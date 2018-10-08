@@ -3,6 +3,9 @@ package net.lomeli.minewell.block.tile
 import com.google.common.base.Strings
 import net.lomeli.minewell.core.helpers.NetworkHelper
 import net.lomeli.minewell.core.util.RangeUtil
+import net.lomeli.minewell.lib.EFFECT_RANGE
+import net.lomeli.minewell.lib.MAX_DISTANCE
+import net.lomeli.minewell.lib.MAX_RADIUS
 import net.lomeli.minewell.potion.ModPotions
 import net.lomeli.minewell.well.Stage
 import net.lomeli.minewell.well.TierRegistry
@@ -20,10 +23,6 @@ import net.minecraft.util.text.TextComponentTranslation
 import net.minecraft.world.EnumDifficulty
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
-
-const val MAX_DISTANCE = 20f
-const val EFFECT_RANGE = MAX_DISTANCE + 5.0
-const val MAX_RADIUS = 5.5f
 
 class TileEndWell : TileEntity(), ITickable {
     private val radiusRate = 0.05f

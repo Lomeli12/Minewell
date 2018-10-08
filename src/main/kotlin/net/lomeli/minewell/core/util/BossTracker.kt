@@ -1,10 +1,8 @@
 package net.lomeli.minewell.core.util
 
 import com.google.common.base.Strings
-import net.lomeli.minewell.block.tile.EFFECT_RANGE
-import net.lomeli.minewell.block.tile.MAX_DISTANCE
-import net.lomeli.minewell.block.tile.MAX_RADIUS
 import net.lomeli.minewell.block.tile.TileEndWell
+import net.lomeli.minewell.lib.EFFECT_RANGE
 import net.lomeli.minewell.potion.ModPotions
 import net.lomeli.minewell.well.WellTier
 import net.minecraft.entity.EntityList
@@ -13,8 +11,6 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.potion.PotionEffect
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.math.MathHelper
-import net.minecraft.util.math.Vec3d
-import net.minecraft.world.World
 import java.util.*
 
 class BossTracker(private val bossBaes: Array<out EntityLiving>) {
@@ -57,7 +53,7 @@ class BossTracker(private val bossBaes: Array<out EntityLiving>) {
         if (hasSpawned) return
         for (entityBase in bossBaes) {
             entityBase.setUniqueId(MathHelper.getRandomUUID(tile.world.rand))
-            val id = getEntityName(entityBase)
+            val id = MobUtil.getEntityName(entityBase)
             if (!Strings.isNullOrEmpty(id)) {
                 val nbt = NBTTagCompound()
                 entityBase.writeToNBT(nbt)
@@ -70,12 +66,11 @@ class BossTracker(private val bossBaes: Array<out EntityLiving>) {
         hasSpawned = true
     }
 
-    private fun getEntityName(entity: EntityLiving): String? = EntityList.getKey(entity)?.toString()
-
     private fun spawnBoss(boss: EntityLiving, tile: TileEndWell) {
         while (true) {
-            val position = getSpawnPoint(tile)
-            val entitySpawned = spawnMonsterAtLocation(boss, position.x, position.y, position.z)
+            val position = MobUtil.getSpawnPoint(tile.pos, tile.world.rand)
+            val entitySpawned = MobUtil.spawnMonsterAtLocation(boss, position.x, position.y, position.z, mobList.size,
+                    maxNumberOfMobs)
             if (entitySpawned != null) {
                 entitySpawned.forceSpawn = true
                 entitySpawned.enablePersistence()
@@ -84,36 +79,6 @@ class BossTracker(private val bossBaes: Array<out EntityLiving>) {
                 break
             }
         }
-    }
-
-    private fun getSpawnPoint(tile: TileEndWell): Vec3d {
-        var spawnPoint: Vec3d? = null
-        while (spawnPoint == null) {
-            val d0 = tile.pos.x.toDouble() + (tile.world.rand.nextDouble() - tile.world.rand.nextDouble()) * MAX_DISTANCE
-            val d1 = (tile.pos.y + tile.world.rand.nextInt(3) - 1).toDouble()
-            val d2 = tile.pos.z.toDouble() + (tile.world.rand.nextDouble() - tile.world.rand.nextDouble()) * MAX_DISTANCE
-            val distance = RangeUtil.get2DDistance(d0, d2, tile.pos.x.toDouble(), tile.pos.z.toDouble())
-            if (distance > MAX_RADIUS)
-                spawnPoint = Vec3d(d0, d1, d2)
-        }
-        return spawnPoint
-    }
-
-    private fun spawnMonsterAtLocation(entity: EntityLiving, x: Double, y: Double, z: Double): EntityLiving? {
-        entity.setLocationAndAngles(x, y, z, entity.rotationYaw, entity.rotationPitch)
-        if (entity.isNotColliding && !entity.isDead && mobList.size < maxNumberOfMobs) {
-            if (entity.world.spawnEntity(entity))
-                return entity
-        }
-        return null
-    }
-
-    private fun getEntityByUUID(world: World, id: UUID): EntityLiving? {
-        for (entity in world.loadedEntityList) {
-            if (entity is EntityLiving && entity.uniqueID.equals(id))
-                return entity
-        }
-        return null
     }
 
     fun readFromNBT(nbt: NBTTagCompound) {

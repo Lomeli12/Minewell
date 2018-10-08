@@ -1,11 +1,11 @@
 package net.lomeli.minewell.well
 
 import com.sun.scenario.effect.impl.state.GaussianRenderState.MAX_RADIUS
-import net.lomeli.minewell.block.tile.MAX_DISTANCE
 import net.lomeli.minewell.block.tile.TileEndWell
+import net.lomeli.minewell.core.util.BossTracker
 import net.lomeli.minewell.core.helpers.MobSpawnerHelper
 import net.lomeli.minewell.core.helpers.NetworkHelper
-import net.lomeli.minewell.core.util.BossTracker
+import net.lomeli.minewell.lib.MAX_DISTANCE
 import net.minecraft.entity.EntityLiving
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
