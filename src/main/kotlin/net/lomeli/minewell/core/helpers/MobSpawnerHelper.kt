@@ -53,6 +53,8 @@ class MobSpawnerHelper(private val entityList: Array<WellEnemy>,
                 }
             }
         }
+        if (!tile.world.isRemote)
+            MobUtil.keepMobsHostile(mobList, tile.pos, tile.world)
     }
 
     fun destroyTrackedMobs() {

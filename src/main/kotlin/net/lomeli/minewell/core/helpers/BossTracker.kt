@@ -31,8 +31,10 @@ class BossTracker(private val bossBaes: Array<out EntityLiving>) {
                     mobList.add(entity)
             }
         }
-        if (!tile.world.isRemote)
+        if (!tile.world.isRemote) {
             spawnBosses(tile)
+            MobUtil.keepMobsHostile(mobList, tile.pos, tile.world)
+        }
         if (mobList.size > 0) {
             val it = mobList.iterator()
             while (it.hasNext()) {

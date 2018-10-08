@@ -1,12 +1,16 @@
 package net.lomeli.minewell.core.util
 
+import net.lomeli.minewell.lib.EFFECT_RANGE
 import net.lomeli.minewell.lib.MAX_DISTANCE
 import net.lomeli.minewell.lib.MAX_RADIUS
 import net.minecraft.entity.EntityList
 import net.minecraft.entity.EntityLiving
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.minecraft.world.World
 import java.util.*
+import kotlin.collections.ArrayList
 
 object MobUtil {
     fun getEntityName(entity: EntityLiving): String? = EntityList.getKey(entity)?.toString()
@@ -31,5 +35,19 @@ object MobUtil {
                 return entity
         }
         return null
+    }
+
+    fun keepMobsHostile(list: ArrayList<EntityLiving>, pos: BlockPos, world: World) {
+        if (list.isEmpty()) return
+        for (entity in list) {
+            if (entity.attackTarget !is EntityPlayer)
+                entity.attackTarget = getRandomPlayerNearCrystal(pos, world)
+        }
+    }
+
+    private fun getRandomPlayerNearCrystal(pos: BlockPos, world: World): EntityPlayer? {
+        val playerList = RangeUtil.getPlayersInRange(EFFECT_RANGE, pos, world)
+        if (playerList.isEmpty()) return null
+        return if (playerList.size == 1) playerList[0] else playerList[world.rand.nextInt(playerList.size)]
     }
 }
