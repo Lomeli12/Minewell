@@ -4,12 +4,10 @@ import net.lomeli.minewell.block.tile.TileEndWell
 import net.lomeli.minewell.item.ItemLightCharge
 import net.lomeli.minewell.item.ModItems
 import net.lomeli.minewell.well.WellTier
-import net.lomeli.minewell.well.tiers.TierOne
 import net.minecraft.block.SoundType
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumBlockRenderType
