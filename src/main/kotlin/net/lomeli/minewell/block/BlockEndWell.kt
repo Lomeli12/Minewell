@@ -1,12 +1,16 @@
 package net.lomeli.minewell.block
 
 import net.lomeli.minewell.block.tile.TileEndWell
+import net.lomeli.minewell.item.ItemLightCharge
+import net.lomeli.minewell.item.ModItems
+import net.lomeli.minewell.well.WellTier
 import net.lomeli.minewell.well.tiers.TierOne
 import net.minecraft.block.SoundType
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
+import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumBlockRenderType
 import net.minecraft.util.EnumFacing
@@ -30,7 +34,7 @@ class BlockEndWell : BlockBase("end_well", Material.GLASS) {
     override fun onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
                                   hand: EnumHand, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean {
         val itemUsed = playerIn.getHeldItem(hand)
-        if (itemUsed.item == Items.NETHER_STAR) {
+        if (itemUsed.item is ItemLightCharge) {
             val tile = worldIn.getTileEntity(pos)
             if (tile != null && tile is TileEndWell && !tile.isWellActivated()) {
                 if (worldIn.difficulty == EnumDifficulty.PEACEFUL) {
@@ -38,7 +42,7 @@ class BlockEndWell : BlockBase("end_well", Material.GLASS) {
                         playerIn.sendMessage(TextComponentTranslation("event.minewell.peaceful"))
                     return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ)
                 }
-                val tier = TierOne()
+                val tier = getTierFromCharge(itemUsed)
                 tier.initTier(tile)
                 tile.setTier(tier)
 
@@ -48,6 +52,8 @@ class BlockEndWell : BlockBase("end_well", Material.GLASS) {
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ)
     }
+
+    private fun getTierFromCharge(stack: ItemStack): WellTier = ModItems.LIGHT_CHARGE.getTierFromStack(stack)
 
     override fun getBoundingBox(state: IBlockState, source: IBlockAccess, pos: BlockPos): AxisAlignedBB = AxisAlignedBB(0.2, 0.0, 0.2, 0.8, 1.0, 0.8)
 
