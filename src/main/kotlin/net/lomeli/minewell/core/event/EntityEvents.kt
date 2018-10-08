@@ -1,6 +1,7 @@
 package net.lomeli.minewell.core.event
 
 import net.lomeli.minewell.Minewell
+import net.lomeli.minewell.block.tile.TileEndWell
 import net.lomeli.minewell.core.util.RangeUtil
 import net.lomeli.minewell.entity.EntityLight
 import net.lomeli.minewell.potion.ModPotions
@@ -20,9 +21,12 @@ object EntityEvents {
             if (entity.isPotionActive(ModPotions.LIGHT) && event.source.trueSource is EntityPlayer) {
                 val pos = RangeUtil.isEntityNearWell(entity, true)
                 if (pos != null) {
-                    val orbLight = EntityLight(entity.world, entity.posX, entity.posY + (entity.height / 2), entity.posZ, pos)
-                    if (!entity.world.isRemote)
-                        entity.world.spawnEntity(orbLight)
+                    val tile = entity.world.getTileEntity(pos)
+                    if (tile is TileEndWell && tile.isWellActivated() && tile.getTier()!!.getCurrentStage().hasMiasma()) {
+                        val orbLight = EntityLight(entity.world, entity.posX, entity.posY + (entity.height / 2), entity.posZ, pos)
+                        if (!entity.world.isRemote)
+                            entity.world.spawnEntity(orbLight)
+                    }
                     //TODO: Loot Tables for hi-end drops
                 }
             }
