@@ -7,7 +7,7 @@ import net.minecraft.util.DamageSource
 
 class PotionVoidTouch : PotionBase(true, 0x23463c) {
 
-    val VOID_DAMAGE = DamageSource("${Minewell.MOD_ID}.void_touch").setDamageBypassesArmor()
+    private val VOID_DAMAGE = DamageSource("${Minewell.MOD_ID}.void_touch").setDamageBypassesArmor()
 
     init {
         setIconIndex(2, 0)
@@ -16,7 +16,7 @@ class PotionVoidTouch : PotionBase(true, 0x23463c) {
     }
 
     override fun performEffect(entityLivingBaseIn: EntityLivingBase, amplifier: Int) {
-        if (entityLivingBaseIn is EntityPlayer)
+        if (entityLivingBaseIn is EntityPlayer && entityLivingBaseIn.world.worldTime % 40 == 0L)
             entityLivingBaseIn.attackEntityFrom(VOID_DAMAGE, 1f)
     }
 
