@@ -2,6 +2,7 @@ package net.lomeli.minewell
 
 import net.lomeli.minewell.core.Proxy
 import net.lomeli.minewell.core.util.Logger
+import net.lomeli.minewell.lib.ModConfig
 import net.minecraft.launchwrapper.Launch
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.SidedProxy
@@ -34,6 +35,9 @@ object Minewell {
     fun preInit(event: FMLPreInitializationEvent) {
         log = Logger()
         if (debug) log.logInfo("Dev environment, enabled logging!")
+
+        ModConfig.setConfig(event.modConfigurationDirectory)
+        ModConfig.loadConfig()
 
         proxy.preInit()
     }

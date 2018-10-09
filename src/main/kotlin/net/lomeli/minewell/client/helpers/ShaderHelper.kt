@@ -7,6 +7,7 @@ import gnu.trove.map.hash.TIntFloatHashMap
 import net.lomeli.minewell.Minewell
 import net.lomeli.minewell.client.handler.ClientTickHandler
 import net.lomeli.minewell.client.render.shader.ShaderCallback
+import net.lomeli.minewell.lib.ModConfig
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraftforge.fml.common.Loader
@@ -57,8 +58,7 @@ object ShaderHelper {
         useShader(0)
     }
 
-    //TODO: Add config to disable shaders
-    fun useShaders(): Boolean = OpenGlHelper.shadersSupported && checkIncompatibleMods()
+    fun useShaders(): Boolean = ModConfig.enableShaders && OpenGlHelper.shadersSupported && checkIncompatibleMods()
 
     private fun checkIncompatibleMods(): Boolean {
         if(!checkedIncompatibility) {

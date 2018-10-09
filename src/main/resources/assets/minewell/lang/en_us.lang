@@ -42,3 +42,7 @@ event.minewell.failure=The Well suddenly closed shut, and the light dissipated.
 event.minewell.success=The Well bursts with gifts from the void!
 
 entity.minewell.light_orb.name=Orb of Light
+
+# Config
+config.minewell.client=These options affect the client. They can be ignored server side!
+config.minewell.client.enable_shaders=Enable use of shaders. Disable this if you're having framerate issues.
