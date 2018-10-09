@@ -53,6 +53,6 @@ object MobUtil {
             val player = it.next()
             if (player.isCreative) it.remove()
         }
-        return if (playerList.size == 1) playerList[0] else playerList[world.rand.nextInt(playerList.size)]
+        return if (playerList.isEmpty()) null else if (playerList.size == 1) playerList[0] else playerList[world.rand.nextInt(playerList.size)]
     }
 }
