@@ -1,18 +1,18 @@
 package net.lomeli.minewell.well
 
-import com.sun.scenario.effect.impl.state.GaussianRenderState.MAX_RADIUS
+import net.lomeli.minewell.block.ModBlocks
 import net.lomeli.minewell.block.tile.TileEndWell
+import net.lomeli.minewell.block.tile.TileEndRewardChest
 import net.lomeli.minewell.core.helpers.BossTracker
 import net.lomeli.minewell.core.helpers.MobSpawnerHelper
 import net.lomeli.minewell.core.helpers.NetworkHelper
 import net.lomeli.minewell.lib.MAX_DISTANCE
 import net.minecraft.entity.EntityLiving
-import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.AxisAlignedBB
-import net.minecraft.util.text.TextComponentTranslation
+import net.minecraft.util.math.BlockPos
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -68,35 +68,26 @@ abstract class WellTier {
                 if (getCurrentKills() >= getKillsNeeded()) {
                     tile.world.playBroadcastSound(1028, tile.pos, 0)
                     failure = false
-                    giverPlayersRewards(tile)
+                    spawnRewardChest(tile)
                     tile.setTimer(0)
                 }
             }
         }
     }
 
-    fun giverPlayersRewards(tile: TileEndWell) {
+
+    fun spawnRewardChest(tile: TileEndWell) {
         val world = tile.world
         val pos = tile.pos
         val playerList = world.getEntitiesWithinAABB(EntityPlayer::class.java,
                 AxisAlignedBB(pos.x.toDouble(), pos.y - 2.0, pos.z.toDouble(), pos.x + 1.0, pos.y - 1.0, pos.z + 1.0)
                         .grow(MAX_DISTANCE.toDouble()))
         if (playerList.isEmpty()) return
+        val newPos = BlockPos(pos.x, pos.y - 2, pos.z)
+        world.setBlockState(newPos, ModBlocks.REWARD_CHEST.defaultState)
+        val rewardChest = world.getTileEntity(newPos) as TileEndRewardChest
         for (player in playerList) {
-            val distance = player.getDistance(pos.x.toDouble(), pos.y - 2.0, pos.z.toDouble())
-            if (distance <= MAX_RADIUS) {
-                if (!world.isRemote)
-                    player.sendMessage(TextComponentTranslation("event.minewell.success"))
-                val rewards = getRandomRewards(world.rand)
-                if (rewards.isNotEmpty()) {
-                    for (item in rewards) {
-                        if (!world.isRemote) {
-                            val entity = EntityItem(world, player.posX, player.posY, player.posZ, item)
-                            world.spawnEntity(entity)
-                        }
-                    }
-                }
-            }
+            rewardChest.addPlayerReward(player, this)
         }
     }
 

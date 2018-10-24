@@ -10,10 +10,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 object ModBlocks {
 
     val END_WELL = BlockEndWell()
+    val REWARD_CHEST = BlockEndRewardChest()
 
     @JvmStatic @SubscribeEvent fun registerBlocks(event: RegistryEvent.Register<Block>) {
         Minewell.log.logInfo("Registering blocks")
         event.registry.register(END_WELL)
+        event.registry.register(REWARD_CHEST)
     }
 
 }

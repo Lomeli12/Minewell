@@ -6,13 +6,18 @@ import net.lomeli.minewell.lib.MAX_RADIUS
 import net.minecraft.entity.EntityList
 import net.minecraft.entity.EntityLiving
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.player.EntityPlayerMP
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
+import net.minecraftforge.common.util.FakePlayer
 import java.util.*
+import java.util.regex.Pattern
 import kotlin.collections.ArrayList
 
 object MobUtil {
+    private val FAKE_PLAYER_PATTERN = Pattern.compile("^(?:\\[.*\\])|(?:ComputerCraft)$")
+
     fun getEntityName(entity: EntityLiving): String? = EntityList.getKey(entity)?.toString()
 
     fun getSpawnPoint(pos: BlockPos, rand: Random): Vec3d {
@@ -55,4 +60,6 @@ object MobUtil {
         }
         return if (playerList.isEmpty()) null else if (playerList.size == 1) playerList[0] else playerList[world.rand.nextInt(playerList.size)]
     }
+
+    fun isFakePlayer(player: EntityPlayer?): Boolean = if (player != null) player !is EntityPlayerMP || player is FakePlayer || FAKE_PLAYER_PATTERN.matcher(player.name).matches() else false
 }

@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "minewell:end_reward_chest",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": {
+      "particle": "minewell:blocks/end_well",
+      "texture": "minewell:models/end_reward_chest"
+    }
+  }
+}

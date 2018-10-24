@@ -2,8 +2,10 @@ package net.lomeli.minewell.client
 
 import net.lomeli.minewell.Minewell
 import net.lomeli.minewell.block.tile.TileEndWell
+import net.lomeli.minewell.block.tile.TileEndRewardChest
 import net.lomeli.minewell.client.effects.GLCallList
 import net.lomeli.minewell.client.render.entity.RenderLightFactory
+import net.lomeli.minewell.client.render.tile.TileEndRewardChestRenderer
 import net.lomeli.minewell.client.render.tile.TileEndWellRenderer
 import net.lomeli.minewell.core.Proxy
 import net.lomeli.minewell.entity.EntityLight
@@ -22,6 +24,7 @@ class ClientProxy : Proxy() {
         super.init()
         GLCallList.initSpheres()
         ClientRegistry.bindTileEntitySpecialRenderer(TileEndWell::class.java, TileEndWellRenderer())
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEndRewardChest::class.java, TileEndRewardChestRenderer())
     }
 
     override fun postInit() {
