@@ -3,10 +3,13 @@ package net.lomeli.minewell.client.effects
 import net.lomeli.minewell.Minewell
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fml.client.FMLClientHandler
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 import org.lwjgl.opengl.GL11
 import org.lwjgl.util.glu.GLU
 import org.lwjgl.util.glu.Sphere
 
+@SideOnly(Side.CLIENT)
 object GLCallList {
     private val mc = FMLClientHandler.instance().client
     var sphereOutID = 0

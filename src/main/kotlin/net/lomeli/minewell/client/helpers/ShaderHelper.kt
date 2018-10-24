@@ -11,6 +11,8 @@ import net.lomeli.minewell.lib.ModConfig
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.OpenGlHelper
 import net.minecraftforge.fml.common.Loader
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 import org.lwjgl.opengl.ARBFragmentShader
 import org.lwjgl.opengl.ARBShaderObjects
 import org.lwjgl.opengl.ARBVertexShader
@@ -19,6 +21,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.stream.Collectors
 
+@SideOnly(Side.CLIENT)
 object ShaderHelper {
     private val VERT = ARBVertexShader.GL_VERTEX_SHADER_ARB
     private val FRAG = ARBFragmentShader.GL_FRAGMENT_SHADER_ARB

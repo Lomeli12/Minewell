@@ -7,11 +7,13 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.resources.I18n
 import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.util.ResourceLocation
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 import net.minecraftforge.items.ItemStackHandler
 
+@SideOnly(Side.CLIENT)
 class GuiEndRewardChest(private val playerInventory: InventoryPlayer, private val chestInventory: ItemStackHandler, tile: TileEndRewardChest):
         GuiContainer(ContainerEndRewardChest(playerInventory, chestInventory, tile)) {
-
     private val GUI_TEXTURES = ResourceLocation("textures/gui/container/dispenser.png")
 
     override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {

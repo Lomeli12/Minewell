@@ -4,9 +4,10 @@ import net.lomeli.minewell.client.helpers.ShaderHelper
 import net.minecraft.util.ResourceLocation
 import org.lwjgl.opengl.ARBShaderObjects
 import net.minecraft.client.Minecraft
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 
-
-
+@SideOnly(Side.CLIENT)
 object ShaderEndPortal {
     val END_PORTAL_TEXTURE = ResourceLocation("textures/entity/end_portal.png")
 
@@ -20,6 +21,7 @@ object ShaderEndPortal {
     }
 }
 
+@SideOnly(Side.CLIENT)
 class EnderCallback: ShaderCallback() {
     override fun call(shader: Int, newFrame: Boolean) {
         val mc = Minecraft.getMinecraft()

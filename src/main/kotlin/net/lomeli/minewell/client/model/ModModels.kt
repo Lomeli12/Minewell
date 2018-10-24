@@ -7,8 +7,11 @@ import net.minecraftforge.client.event.ModelRegistryEvent
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 
-@Mod.EventBusSubscriber(modid = Minewell.MOD_ID)
+@SideOnly(Side.CLIENT)
+@Mod.EventBusSubscriber(modid = Minewell.MOD_ID, value = [Side.CLIENT])
 object ModModels {
     @JvmStatic
     @SubscribeEvent

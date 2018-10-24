@@ -15,8 +15,11 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.util.EnumParticleTypes
 import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fml.client.FMLClientHandler
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 import org.lwjgl.opengl.GL11
 
+@SideOnly(Side.CLIENT)
 class TileEndWellRenderer : TileEntitySpecialRenderer<TileEndWell>() {
     override fun render(tile: TileEndWell, x: Double, y: Double, z: Double, partialTicks: Float,
                         destroyStage: Int, alpha: Float) {

@@ -6,7 +6,9 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 
+@SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = Minewell.MOD_ID, value = [Side.CLIENT])
 object ClientTickHandler {
     var ticksInGame = 0

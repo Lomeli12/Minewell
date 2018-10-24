@@ -4,8 +4,11 @@ import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraftforge.fml.client.FMLClientHandler
+import net.minecraftforge.fml.relauncher.Side
+import net.minecraftforge.fml.relauncher.SideOnly
 import org.lwjgl.opengl.GL11
 
+@SideOnly(Side.CLIENT)
 object RenderHelper {
     private val mc = FMLClientHandler.instance().client
 
