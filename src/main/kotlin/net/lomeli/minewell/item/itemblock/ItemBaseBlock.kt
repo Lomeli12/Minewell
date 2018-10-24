@@ -1,25 +1,24 @@
-package net.lomeli.minewell.item
+package net.lomeli.minewell.item.itemblock
 
 import com.google.common.base.Strings
-import net.lomeli.minewell.Minewell
 import net.lomeli.minewell.client.helpers.KeyHelper
-import net.lomeli.minewell.core.CreativeMineWell
+import net.lomeli.minewell.item.IItemRarity
+import net.lomeli.minewell.item.ILoreInfo
+import net.minecraft.block.Block
 import net.minecraft.client.resources.I18n
 import net.minecraft.client.util.ITooltipFlag
-import net.minecraft.item.Item
+import net.minecraft.item.ItemBlock
 import net.minecraft.item.ItemStack
 import net.minecraft.util.text.TextFormatting
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.Side
 import net.minecraftforge.fml.relauncher.SideOnly
 
-open class ItemBase(name: String) : Item() {
+open class ItemBaseBlock(block: Block) : ItemBlock(block) {
     private val INFO_TEXT = "item.minewell.info"
 
     init {
-        unlocalizedName = "${Minewell.MOD_ID}.$name"
-        setRegistryName(Minewell.MOD_ID, name)
-        creativeTab = CreativeMineWell
+        registryName = block.registryName
     }
 
     @SideOnly(Side.CLIENT)
@@ -45,7 +44,6 @@ open class ItemBase(name: String) : Item() {
                     tooltip.add(I18n.format(INFO_TEXT))
             }
         }
-
         super.addInformation(stack, world, tooltip, flag)
     }
 }

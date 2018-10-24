@@ -3,14 +3,20 @@ itemGroup.minewell=Minewell
 
 # Blocks
 tile.minewell.end_well.name=End Well Core
+tile.minewell.end_well.lore=An odd crystal that emits the hums of the Void, the realm between realms and center of creation. With the right offering, perhaps you can pull beings into this realm and claim their power; even those who were not meant to be.
 tile.minewell.end_reward_chest.name=Reward Chest
 
 # Items
 item.minewell.light_charge.tier_one.name=Charge of Light - Tier I
+item.minewell.light_charge.tier_one.lore=The Light barely radiates from this item, but it's there. Offer this to the End Well Core to provide a spark of life to the mechanism.
 item.minewell.light_charge.tier_two.name=Charge of Light - Tier II
+item.minewell.light_charge.tier_two.lore=This item hums with the power of the Light. Offer this to the End Well Core to provide a decent charge to the mechanism.
 item.minewell.light_charge.tier_three.name=Charge of Light - Tier III
+item.minewell.light_charge.tier_three.lore=You can feel the energy contained within radiating from the orb. Offer this to the End Well Core to provide a surge of power to the mechanism.
 item.minewell.void_ingot.name=Void Ingot
 item.minewell.void_nugget.name=Void Nugget
+
+item.minewell.info=§7§o<Press Shift for more info>§r
 
 # Potions
 potion.minewell.sky_touch=Touch of Sky
@@ -18,6 +24,14 @@ potion.minewell.void_touch=Touch of the Void
 potion.minewell.harmony=Harmony
 potion.minewell.light=Light
 
+# Item Rarity
+rarity.minewell.common=Common
+rarity.minewell.uncommon=Uncommon
+rarity.minewell.rare=Rare
+rarity.minewell.legendary=Legendary
+rarity.minewell.exotic=Exotic
+
+# Death Messages
 death.attack.minewell.void_touch=%1$s vanished into the Void.
 
 # Minewell
