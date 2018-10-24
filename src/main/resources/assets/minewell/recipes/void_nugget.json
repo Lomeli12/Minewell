@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "minewell:void_ingot"
+    }
+  },
+  "result": {
+    "item": "minewell:void_nugget",
+    "count": 9
+  }
+}

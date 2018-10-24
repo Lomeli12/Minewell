@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.relauncher.Side
 
-@Mod.EventBusSubscriber(modid = Minewell.MOD_ID, value = Side.CLIENT)
+@Mod.EventBusSubscriber(modid = Minewell.MOD_ID, value = [Side.CLIENT])
 object ClientTickHandler {
     var ticksInGame = 0
     var renderTick = 0f

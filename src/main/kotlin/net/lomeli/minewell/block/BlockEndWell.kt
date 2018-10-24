@@ -34,7 +34,7 @@ class BlockEndWell : BlockBase("end_well", Material.GLASS) {
         val itemUsed = player.getHeldItem(hand)
         if (itemUsed.item is ItemLightCharge) {
             val tile = world.getTileEntity(pos)
-            if (tile is TileEndWell && !tile.isWellActivated()) {
+            if (tile is TileEndWell && !tile.isWellActivated() && isValidShape(world, pos)) {
                 if (world.difficulty == EnumDifficulty.PEACEFUL) {
                     if (!world.isRemote)
                         player.sendMessage(TextComponentTranslation("event.minewell.peaceful"))
@@ -49,6 +49,20 @@ class BlockEndWell : BlockBase("end_well", Material.GLASS) {
             }
         }
         return super.onBlockActivated(world, pos, state, player, hand, facing, hitX, hitY, hitZ)
+    }
+
+    private fun isValidShape(world: World, pos: BlockPos): Boolean{
+        for (y in 1..2) {
+            if (!world.isAirBlock(BlockPos(pos.x, pos.y - y, pos.z)))
+                return false
+        }
+
+        for (x in -1..1)
+            for (z in -1..1) {
+
+            }
+
+        return true
     }
 
     override fun breakBlock(world: World, pos: BlockPos, state: IBlockState) {

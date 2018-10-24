@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.Side
 
-@Mod.EventBusSubscriber(modid = Minewell.MOD_ID, value = Side.CLIENT)
+@Mod.EventBusSubscriber(modid = Minewell.MOD_ID, value = [Side.CLIENT])
 object TextHandler {
     private val mc = FMLClientHandler.instance().client
 

@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.Side
 
-@Mod.EventBusSubscriber(modid = Minewell.MOD_ID, value = Side.CLIENT)
+@Mod.EventBusSubscriber(modid = Minewell.MOD_ID, value = [Side.CLIENT])
 object BarOverlay {
     private val mc = FMLClientHandler.instance().client
     private val BAR_TEXTURES = ResourceLocation(Minewell.MOD_ID, "textures/gui/bars.png")

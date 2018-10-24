@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "void_ingot",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minewell:void_nugget"
+    }
+  },
+  "result": {
+    "item": "minewell:void_ingot"
+  }
+}

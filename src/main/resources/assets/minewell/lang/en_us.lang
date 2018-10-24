@@ -8,6 +8,8 @@ tile.minewell.end_well.name=End Well Core
 item.minewell.light_charge.tier_one.name=Charge of Light - Tier I
 item.minewell.light_charge.tier_two.name=Charge of Light - Tier II
 item.minewell.light_charge.tier_three.name=Charge of Light - Tier III
+item.minewell.void_ingot.name=Void Ingot
+item.minewell.void_nugget.name=Void Nugget
 
 # Potions
 potion.minewell.sky_touch=Touch of Sky

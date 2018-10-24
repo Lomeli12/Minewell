@@ -10,7 +10,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 
 @Mod.EventBusSubscriber(modid = Minewell.MOD_ID)
 object ModModels {
-    @JvmStatic @SubscribeEvent fun registerModel(event: ModelRegistryEvent) {
+    @JvmStatic
+    @SubscribeEvent
+    fun registerModel(event: ModelRegistryEvent) {
         registerBlockModel(event)
         registerItemModel(event)
     }
@@ -27,5 +29,10 @@ object ModModels {
                 ModelResourceLocation("${Minewell.MOD_ID}:light_charge_tier_two", "inventory"))
         ModelLoader.setCustomModelResourceLocation(ModItems.LIGHT_CHARGE, 2,
                 ModelResourceLocation("${Minewell.MOD_ID}:light_charge_tier_three", "inventory"))
+
+        ModelLoader.setCustomModelResourceLocation(ModItems.VOID_INGOT, 0,
+                ModelResourceLocation("${Minewell.MOD_ID}:void_ingot", "inventory"))
+        ModelLoader.setCustomModelResourceLocation(ModItems.VOID_NUGGET, 0,
+                ModelResourceLocation("${Minewell.MOD_ID}:void_nugget", "inventory"))
     }
 }
